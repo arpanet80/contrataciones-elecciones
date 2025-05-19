@@ -1,0 +1,1276 @@
+
+<!--begin::Main column-->
+<div class="d-flex flex-column flex-lg-row-fluid gap-7 gap-lg-10">
+
+    <!--begin:: card  -->
+    <div class="card card-flush py-4">
+
+        <!--begin::Card body-->
+        <div class="card-body pt-0">
+
+                <!--begin::Stepper-->
+                <div class="stepper stepper-pills" id="kt_stepper_example_basic">
+                    
+                    <!--begin::Nav-->
+                    <div class="stepper-nav flex-center flex-wrap mb-10">
+                        <!--begin::Step 1-->
+                        <div class="stepper-item mx-8 my-4 current" data-kt-stepper-element="nav">
+                            <!--begin::Wrapper-->
+                            <div class="stepper-wrapper d-flex align-items-center">
+                                <!--begin::Icon-->
+                                <div class="stepper-icon w-40px h-40px">
+                                    <i class="stepper-check fas fa-check"></i>
+                                    <span class="stepper-number">1</span>
+                                </div>
+                                <!--end::Icon-->
+                    
+                                <!--begin::Label-->
+                                <div class="stepper-label">
+                                    <h3 class="stepper-title">
+                                        Paso 1
+                                    </h3>
+                    
+                                    <div class="stepper-desc">
+                                        Informacion del proceso (FUC)
+                                    </div>
+                                </div>
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Wrapper-->
+                    
+                            <!--begin::Line-->
+                            <div class="stepper-line h-40px"></div>
+                            <!--end::Line-->
+                        </div>
+                        <!--end::Step 1-->
+                    
+                        <!--begin::Step 2-->
+                        <div class="stepper-item mx-8 my-4" data-kt-stepper-element="nav">
+                            <!--begin::Wrapper-->
+                            <div class="stepper-wrapper d-flex align-items-center">
+                                <!--begin::Icon-->
+                                <div class="stepper-icon w-40px h-40px">
+                                    <i class="stepper-check fas fa-check"></i>
+                                    <span class="stepper-number">2</span>
+                                </div>
+                                <!--begin::Icon-->
+                    
+                                <!--begin::Label-->
+                                <div class="stepper-label">
+                                    <h3 class="stepper-title">
+                                        Paso 2
+                                    </h3>
+                    
+                                    <div class="stepper-desc">
+                                        Especificaciones tcnicas
+                                    </div>
+                                </div>
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Wrapper-->
+                    
+                            <!--begin::Line-->
+                            <div class="stepper-line h-40px"></div>
+                            <!--end::Line-->
+                        </div>
+                        <!--end::Step 2-->
+                    
+                        <!--begin::Step 3-->
+                        <div class="stepper-item mx-8 my-4" data-kt-stepper-element="nav">
+                            <!--begin::Wrapper-->
+                            <div class="stepper-wrapper d-flex align-items-center">
+                                <!--begin::Icon-->
+                                <div class="stepper-icon w-40px h-40px">
+                                    <i class="stepper-check fas fa-check"></i>
+                                    <span class="stepper-number">3</span>
+                                </div>
+                                <!--begin::Icon-->
+                    
+                                <!--begin::Label-->
+                                <div class="stepper-label">
+                                    <h3 class="stepper-title">
+                                        Paso 3
+                                    </h3>
+                    
+                                    <div class="stepper-desc">
+                                        Cetificaciones
+                                    </div>
+                                </div>
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Wrapper-->
+                    
+                            <!--begin::Line-->
+                            <div class="stepper-line h-40px"></div>
+                            <!--end::Line-->
+                        </div>
+                        <!--end::Step 3-->
+                    
+                        <!--begin::Step 4-->
+                        <div class="stepper-item mx-8 my-4" data-kt-stepper-element="nav">
+                            <div class="stepper-wrapper d-flex align-items-center">
+                                <div class="stepper-icon w-40px h-40px">
+                                    <i class="stepper-check fas fa-check"></i>
+                                    <span class="stepper-number">4</span>
+                                </div>
+                                <div class="stepper-label">
+                                    <h3 class="stepper-title">
+                                        Paso 4
+                                    </h3>
+                                    <div class="stepper-desc">
+                                        Resumen 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stepper-line h-40px"></div>
+                        </div> 
+                        <!--end::Step 4-->
+                    </div>
+                    <!--end::Nav-->
+
+                    <!--begin::Form-->
+                    <form [formGroup]="formIniciofContrat"  class="form w-lg-900px mx-auto" novalidate="novalidate" id="kt_stepper_example_basic_form">
+                        
+                        <!--begin::Group-->
+                        <div class="mb-5">
+
+                            <!--begin::Step 1-->
+                            <div class="flex-column current" data-kt-stepper-element="content">
+
+                                <!--begin::Formulatio pagina 1-->
+                                <div class="d-flex flex-column gap-5 gap-md-7">
+
+                                    <!--begin::Title-->
+                                    <!-- <div class="fs-3 fw-bold mb-n2">Billing Address</div> -->
+                                    <!--end::Title-->
+
+                                    <!-- ----------------- Fila ------------------------- -->
+                                    <!--begin::Input group-->
+                                    <div class="d-flex flex-column flex-md-row gap-5">
+
+                                        <div class="fv-row flex-row-fluid">
+
+                                            <!--begin::Label-->
+                                            <label class="form-label">Tipo de proceso de contratacion</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Roles-->
+                                            <div class="d-flex fv-row gap-4">
+                                                <!-- Iterar sobre tipoProcesoArray -->
+                                                @for (item of tipoProcesoArray; track $index) {
+
+                                                    <div class="form-check form-check-custom form-check-solid">
+                                                        <!--begin::Input-->
+                                                        <input 
+                                                            formControlName="idtipoproceso" 
+                                                            class="form-check-input me-3" 
+                                                            type="radio" 
+                                                            [value]="item.id" 
+                                                            formControlName="idtipoproceso" 
+                                                            [id]="'kt_modal_update_role_option_' + item.id" 
+                                                            (change)="onChangeSeleccion(item)"
+                                                        />
+                                                        <!--end::Input-->
+                                            
+                                                        <!--begin::Label-->
+                                                        <label class="form-check-label" [for]="'kt_modal_update_role_option_' + item.id">
+                                                            <div class="fw-bold text-gray-800">{{ item.nombre }}</div>
+                                                            <div class="text-gray-600">{{ item.descripcion }}</div>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                    </div>
+                                                }
+                                                
+                                            </div>
+                                            <!--end::Roles-->
+                                            <control-messages [control]="getControl('idtipoproceso')"></control-messages>
+
+                                        </div>
+
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!-- ----------------- Fila ------------------------- -->
+                                    <!--begin::Input group-->
+                                    <div class="d-flex flex-column flex-md-row gap-5">
+
+                                        <div style="width: 25%;"  class="flex-row-fluid">
+
+                                            <!--begin::Label-->
+                                            <label class="required form-label">Seleccion de requerimientos</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <div style="width: 100%; display: flex; justify-content: left;">
+                                                <button (click)="openDialog()"  class="btn btn-primary"  >
+                                                        Click para seleccionar
+                                                </button>
+                                            </div>
+                                            <control-messages [control]="getControl('requerimientos')"></control-messages>
+                                            <control-messages [control]="getControl('itemsProceso')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div style="width: 20%;" class="fv-row flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="required form-label">Precio Total (Bs)</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="number" formControlName="preciototal"  class="form-control" name="billing_order_postcode" readonly placeholder="" />
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div style="width: 20%;" class="fv-row flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="required form-label">Tiempo entrega (dias)</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="number" formControlName="plazoentrega"  class="form-control" name="billing_order_postcode"  placeholder="" />
+                                            <control-messages [control]="getControl('plazoentrega')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div style="width: 20%;" class="fv-row flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Codigo PAC: (+ Bs. 20,000)</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="text" formControlName="codigopac"  class="form-control" name="billing_order_postcode" placeholder="" />
+                                            <control-messages [control]="getControl('codigopac')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!-- ----------------- Fila ------------------------- -->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Objeto de la contratacion</label>
+                                        <!--end::Label-->
+
+                                        <!--begin::Input-->
+                                        <input type="text" formControlName="objetocontratacion"  class="form-control form-control-solid" name="target_details" placeholder="Objet contratacion" />
+                                            <control-messages [control]="getControl('objetocontratacion')"></control-messages>
+                                            <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!-- ----------------- Fila ------------------------- -->                            
+                                    <!--begin::Input group-->
+                                    <div class="d-flex flex-column flex-md-row gap-5">
+
+                                        <div style="width: 23%;"   class="flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="required form-label">Forma de contratacion)</label>
+                                            <!--end::Label-->
+
+                                            <select class="form-select form-select-solid" 
+                                                data-hide-search="true" 
+                                                data-control="select2"  
+                                                data-placeholder="Seleccione" 
+                                                formControlName="idformacontratacion">
+                                    
+                                                <option *ngFor="let item of combosProceso?.formaContrat" [value]="item.id">
+                                                    {{ item.detalle }}
+                                                </option>
+                                            </select>
+                                            <control-messages [control]="getControl('idformacontratacion')"></control-messages>
+                                        </div>
+
+                                        <div style="width: 20%;"  class="fv-row flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Forma de Adjudicacion</label>
+                                            <!--end::Label-->
+
+                                            <select class="form-select form-select-solid" 
+                                                data-hide-search="true" 
+                                                data-control="select2"  
+                                                data-placeholder="Seleccione" 
+                                                formControlName="idformaadjudic">
+                                    
+                                                <option *ngFor="let item of combosProceso?.formaAdjudic" [value]="item.id">
+                                                    {{ item.detalle }}
+                                                </option>
+                                            </select>
+                                            <control-messages [control]="getControl('idformaadjudic')"></control-messages>
+                                        </div>
+
+                                        <div style="width: 20%;"  class="fv-row flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Metodo de selección y adjudicacion</label>
+                                            <!--end::Label-->
+
+                                            <select class="form-select form-select-solid" 
+                                                data-hide-search="true" 
+                                                data-control="select2"  
+                                                data-placeholder="Seleccione" 
+                                                formControlName="idmetodoseleccionadjudic">
+                                    
+                                                <option *ngFor="let item of combosProceso?.metodoSeleccion" [value]="item.id">
+                                                    {{ item.detalle }}
+                                                </option>
+                                            </select>
+                                            <control-messages [control]="getControl('idmetodoseleccionadjudic')"></control-messages>
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
+                                    
+                                    <!-- ----------------- Fila ------------------------- -->
+                                    <!--begin::Personal-->
+                                    <div *ngIf="idTipoProceso === 3" class="d-flex flex-column gap-5 gap-md-7">
+                                        <!--begin::Title-->
+                                        <div class="fs-3 fw-bold mb-n2">Servicios de Consultoria Individuales de Linea </div>
+                                        <!--end::Title-->
+
+                                        <!--begin::Input group-->
+                                        <div class="d-flex flex-column flex-md-row gap-5">
+                                            <div class="flex-row-fluid">
+                                                <!--begin::Label-->
+                                                <label class="form-label">Nivel salarial</label>
+                                                <!--end::Label-->
+
+                                                <select class="form-select form-select-solid" 
+                                                    data-hide-search="true" 
+                                                    data-control="select2"  
+                                                    data-placeholder="Seleccione" 
+                                                    formControlName="idnivelsalarial">
+                                        
+                                                    <option *ngFor="let item of combosProceso?.nivelSalarial" [value]="item.id">
+                                                        {{ item.nivelsalarial }}
+                                                    </option>
+                                                </select>
+                                            <control-messages [control]="getControl('idnivelsalarial')"></control-messages>
+                                        </div>
+
+                                            <div class="fv-row flex-row-fluid">
+                                                <!--begin::Label-->
+                                                <label class="required form-label">Honorario mensual</label>
+                                                <!--end::Label-->
+
+                                                <!--begin::Input-->
+                                                <input formControlName="honorariomensual" type="number" class="form-control"  />
+                                                <control-messages [control]="getControl('honorariomensual')"></control-messages>
+                                            <!--end::Input-->
+                                            </div>
+
+                                            <div class="fv-row flex-row-fluid">
+                                                <!--begin::Label-->
+                                                <label class="required form-label">Numero casos</label>
+                                                <!--end::Label-->
+
+                                                <!--begin::Input-->
+                                                <input formControlName="numerocasos" type="number" class="form-control"  />
+                                                <control-messages [control]="getControl('numerocasos')"></control-messages>
+
+                                                <div class="invalid-feedback"
+                                                    *ngIf="formIniciofContrat.get('numerocasos')?.invalid && formIniciofContrat.get('numerocasos')?.touched">
+                                                        El nivel salarial debe ser mayor a 0.
+                                                </div>
+                                                <!--end::Input-->
+                                            </div>
+                                        </div>
+                                        <!--end::Input group-->
+
+                                        <!--begin::Input group-->
+                                        <div class="fv-row">
+                                            <!--begin::Label-->
+                                            <label class="required form-label">Observaciones</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="text" formControlName="observaciones"  class="form-control form-control-solid" name="target_details" placeholder="Objet contratacion" />
+                                                <control-messages [control]="getControl('observaciones')"></control-messages>
+                                                <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+
+                                    </div>
+                                    <!--end::Personal-->
+                                    
+                                </div>
+                                <!--end::Formulatio pagina 1-->
+
+                            </div>
+                            <!--end::Step 1-->
+
+                            <!--begin::Step 2-->
+                            <div class="flex-column" data-kt-stepper-element="content">
+
+                                <!-- ------------------------------------------- -->
+                                <label class="btn btn-outline btn-outline-dashed btn-active-light-primary active d-flex text-start p-6" >
+                                    <!-- <i class="ki-duotone ki-file-up text-primary fs-3x"><span class="path1"></span><span class="path2"></span></i>                    end::Icon -->
+                                    <i class="ki-duotone ki-information text-primary fs-3x"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                    <span class="ms-5">
+                                        <h3 class="fs-5 fw-bold text-gray-900 mb-1">De manera clara y concisa debe redactar las especificaciones tecnicas del servicio o adquisicion objeto de la presente solicitud de contratación.</h3>
+                                        <!-- <span class="fs-4 fw-bold mb-1 d-block">Precise Usage</span> -->
+                                        <span class="fw-semibold fs-7 text-gray-600">Si le resulta mas comdo redactar en Word dispone de una plantilla que puede <a href="assets/modelo.docx" class="fw-bold me-1">descargar aqui</a> desde el cual solo tendra que copiar al formulario<</span>
+                                    </span>
+                                </label>
+                                <br>
+                                
+                                <!--begin::Formulatio pagina 1-->
+                                <div class="d-flex flex-column gap-5 gap-md-7">
+
+                                    <!--begin::Input group-->
+                                    <div *ngIf="idTipoProceso === 2"  class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Descripcion del servicio</label>
+                                        <!--end::Label-->
+                                        <br>
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig" formControlName="descripcion" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('descripcion')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Requisitos tecnicos de la contratacion</label>
+                                        <!--end::Label-->
+ 
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig" formControlName="especificaciones" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('especificaciones')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Justificacion de la contratacion</label>
+                                        <!--end::Label-->
+ 
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig" formControlName="justificacion" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('justificacion')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--end::Input group--><!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Condiciones complementarias</label>
+                                        <!--end::Label-->
+ 
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig"  formControlName="condicionescomplementarias" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('condicionescomplementarias')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+
+                                    <!--end::Input group--><!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Formalizacion de la contratacion</label>
+                                        <!--end::Label-->
+ 
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig" formControlName="formalizacion" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('formalizacion')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+
+                                    <!--end::Input group--><!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Plazo de entrega</label>
+                                        <!--end::Label-->
+ 
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig" formControlName="plazoentregaliteral" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('plazoentregaliteral')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+
+                                    <!--end::Input group--><!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Lugar de entrega del bien o servicio</label>
+                                        <!--end::Label-->
+ 
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig" formControlName="lugarentrega" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('lugarentrega')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+
+                                    <!--end::Input group--><!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Instalacion del bien (si corresponde)</label>
+                                        <!--end::Label-->
+ 
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig" formControlName="instalacion" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('instalacion')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+
+                                    <!--end::Input group--><!--begin::Input group-->
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="required form-label">Garantias exigibles del bien o servicio</label>
+                                        <!--end::Label-->
+ 
+                                        <!--begin::Input-->
+                                        <quill-editor [modules]="editorConfig" formControlName="garantia" [styles]="{ height: '100px' }" placeholder="Ingrese el texto con formato" />
+                                        <control-messages [control]="getControl('garantia')"></control-messages>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+
+                                </div>
+                                <!--end::Formulatio pagina 1-->
+
+                            </div>
+                            <!--end::Step 2-->
+
+                            <!--begin::Step 3-->
+                            <div class="flex-column" data-kt-stepper-element="content">
+
+                                <form [formGroup]="formCertificacion">
+                                    <div class="d-flex justify-content-end mt-2">
+                                        <button type="button" class="btn btn-primary btn-" (click)="agregarFila()">
+                                            <i class="bi bi-plus-lg"></i>
+                                            Agregar certificacion
+                                        </button>
+                                    </div>
+                                    
+                                    <table class="table">
+                                      <thead>
+                                        <tr>
+                                          <th>Preventivo</th>
+                                          <th>Fecha</th>
+                                          <th>Importe</th>
+                                          <th>Partida</th>
+                                          <th>Acciones</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr *ngFor="let fila of registros.controls; let i = index" [formGroup]="getRegistroFormGroup(i)">
+                                          <td><input type="number" class="form-control" formControlName="preventivo"></td>
+                                          <td><input type="date" class="form-control" formControlName="fecha"></td>
+                                          <td><input type="number" class="form-control" formControlName="importe"></td>
+                                          <td>
+                                            <select class="form-control" formControlName="partida">
+                                              <option *ngFor="let partida of combosPartidas" [value]="partida.partida">{{ partida.partida }}</option>
+                                            </select>
+                                          </td>
+                                          <td>
+                                            <button type="button" class="btn btn-danger btn-" (click)="eliminarFila(i)">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  
+                                    <!-- <button type="button" class="btn btn-success" (click)="enviarFormulario()">Enviar</button> -->
+                                </form>
+
+                            </div>
+                            <!--end::Step 3-->
+
+                            <!--begin::Step 4-->
+                            <div class="flex-column" data-kt-stepper-element="content">
+
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between">
+                                      <h5 class="card-title">Resumen del proceso</h5>
+                                      <!-- <button class="btn btn-primary btn-sm" (click)="actualizarTabla()">Actualizar</button> -->
+                                    </div>
+                                    <div class="card-body">
+                                      <div class="row">
+                                        <div class="col-md-6">
+
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                  <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Valor</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr *ngFor="let item of resumenArray">
+                                                    <td>{{ item.nombre }}</td>
+                                                    <td>{{ item.valor }}</td>
+                                                  </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                      </div>
+
+                                      <!-- Tabla de Certificación -->
+                                      <div *ngIf="getRegistros().length > 0">
+                                        <h5>Certificación</h5>
+                                        <table class="table table-striped">
+                                          <thead>
+                                            <tr>
+                                              <th>Preventivo</th>
+                                              <th>Fecha</th>
+                                              <th>Importe</th>
+                                              <th>Partida</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr *ngFor="let item of getRegistros()">
+                                              <td>{{ item.preventivo }}</td>
+                                              <td>{{ item.fecha }}</td>
+                                              <td>{{ item.importe }}</td>
+                                              <td>{{ item.partida }}</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                      
+  
+                                  
+                                      <!-- Tabla de Requerimientos -->
+                                      <div *ngIf="formIniciofContrat.get('requerimientos')?.value.length">
+                                        <h5>Requerimientos PIE/POA a ejecutar</h5>
+                                        <table class="table table-striped">
+                                          <thead>
+                                            <tr>
+                                              <th>Requerimiento</th>
+                                              <th>Partida</th>
+                                              <th>Unidad</th>
+                                              <th>Cantidad</th>
+                                              <th>Precio Unitario</th>
+                                              <th>Actual</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr *ngFor="let item of formIniciofContrat.get('requerimientos')?.value">
+                                              <td>{{ item.requerimiento }}</td>
+                                              <td>{{ item.partida }}</td>
+                                              <td>{{ item.unidad }}</td>
+                                              <td>{{ item.cantidad }}</td>
+                                              <td>{{ item.preciounitario }}</td>
+                                              <td>{{ item.actual }}</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                  
+                                      <!-- Tabla de Items de Proceso -->
+                                      <div *ngIf="formIniciofContrat.get('itemsProceso')?.value.length">
+                                        <h5>Items objeto de la Contratacion</h5>
+                                        <table class="table table-striped">
+                                          <thead>
+                                            <tr>
+                                              <th>Requerimiento</th>
+                                              <th>Unidad</th>
+                                              <th>Cantidad</th>
+                                              <th>Total</th>
+                                              <th>Partida</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr *ngFor="let item of formIniciofContrat.get('itemsProceso')?.value">
+                                              <td>{{ item.requerimiento }}</td>
+                                              <td>{{ item.unidad }}</td>
+                                              <td>{{ item.cantidad }}</td>
+                                              <td>{{ item.total }}</td>
+                                              <td>{{ item.partida }}</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                  
+                                      <!-- Tabla de Certificación -->
+                                      <div *ngIf="formIniciofContrat.get('certificacion')?.value.length">
+                                        <h5>Certificación</h5>
+                                        <table class="table table-striped">
+                                          <thead>
+                                            <tr>
+                                              <th>Preventivo</th>
+                                              <th>Fecha</th>
+                                              <th>Importe</th>
+                                              <th>Partida</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr *ngFor="let item of formIniciofContrat.get('certificacion')?.value">
+                                              <td>{{ item.preventivo }}</td>
+                                              <td>{{ item.fecha }}</td>
+                                              <td>{{ item.importe }}</td>
+                                              <td>{{ item.partida }}</td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  
+                                  <!-- <button (click)="comprobarForm()">Comprobar</button> -->
+                                
+                            </div> 
+                            <!--end::Step 4-->
+
+                        </div>
+                        <!--end::Group-->
+
+                        <!--begin::Actions-->
+                        <div class="d-flex flex-stack">
+                            <!--begin::Wrapper-->
+                            <div class="me-2">
+                                <button type="button" class="btn btn-light btn-active-light-primary" data-kt-stepper-action="previous">
+                                    Volver
+                                </button>
+                            </div>
+                            <!--end::Wrapper-->
+
+                            
+                            <!--begin::Wrapper-->
+                            <div>
+                                <button 
+                                    type="button" 
+                                    class="btn btn-primary" 
+                                    (click)="guardarProceso()"
+                                    [disabled]="formIniciofContrat.invalid" 
+                                    data-kt-stepper-action="submit">
+                                    <span class="indicator-label">
+                                        Guardar
+                                    </span>
+                                    <!-- <span class="indicator-progress">
+                                        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span> -->
+                                </button>
+
+                                <button
+                                     class="btn btn-primary" 
+                                     (click)="stepConitnuar()"
+                                     data-kt-stepper-action="next" >
+                                    Continuar
+                                </button>
+                                <!-- [disabled]="isControlsValid()" -->
+                            </div>
+                            <!--end::Wrapper-->
+                        </div>
+                        <!--end::Actions-->
+
+                    </form>
+                    <!--end::Form-->
+                    
+                </div>
+                <!--end::Stepper-->
+                
+        </div>
+        <!--end::Card body-->
+
+    </div>
+    <!--end:: card  -->
+
+</div>
+<!--end::Main column-->
+
+
+
+
+<!-- ----------  MODAL SELECCION REQUERIMIENTOS   --------------------------------- -->
+<!--begin::Modal - Add task-->
+
+<!-- ------------------------------------------------------- -->
+<!---------------  Para impedir que se cierre: -->
+<!-- data-bs-backdrop="static" data-bs-keyboard="false" --> 
+<!-- ------------------------------------------------------- -->
+<div class="modal fade" id="kt_modal_seleccion_requerimientos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" >
+
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+  
+        <!--begin::Modal content-->
+        <div class="modal-content">
+
+            <!--begin::Modal header-->
+            <div class="modal-header" id="kt_modal_add_user_header">
+
+                <!--begin::Modal title-->
+                <h2 class="fw-bold">Seleccion de Requerimintos </h2>
+                <!--end::Modal title-->
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" >
+                <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+                <!--end::Close-->
+
+            </div>
+            <!--end::Modal header-->
+
+            <!--begin::Modal body-->
+            <div class="modal-body ">
+
+                <form class="modal-content stepper stepper-pills" id="kt_stepper_requerimientos">
+
+                    <div class="modal-body px-10">
+                        
+                        <!--begin::Stepper-->
+                        <div>
+                            <!--begin::Nav-->
+                            <div class="stepper-nav flex-center flex-wrap mb-10">
+
+                                <!--begin::Step 1-->
+                                <div class="stepper-item mx-4 my-4 current" data-kt-stepper-element="nav">
+                                    
+                                    <!--begin::Wrapper-->
+                                    <div class="stepper-wrapper d-flex align-items-center">
+                                        <!--begin::Icon-->
+                                        <div class="stepper-icon w-40px h-40px">
+                                            <i class="stepper-check fas fa-check"></i>
+                                            <span class="stepper-number">1</span>
+                                        </div>
+                                        <!--end::Icon-->
+        
+                                        <!--begin::Label-->
+                                        <div class="stepper-label">
+                                            <h3 class="stepper-title">
+                                                Paso 1
+                                            </h3>
+        
+                                            <div class="stepper-desc">
+                                                Seleccion de requerimientos  Plan
+                                            </div>
+                                        </div>
+                                        <!--end::Label-->
+                                    </div>
+                                    <!--end::Wrapper-->
+        
+                                    <!--begin::Line-->
+                                    <div class="stepper-line h-40px"></div>
+                                    <!--end::Line-->
+                                </div>
+                                <!--end::Step 1-->
+        
+                                <!--begin::Step 2-->
+                                <div class="stepper-item mx-4 my-4" data-kt-stepper-element="nav">
+                                    <!--begin::Wrapper-->
+                                    <div class="stepper-wrapper d-flex align-items-center">
+                                        <!--begin::Icon-->
+                                        <div class="stepper-icon w-40px h-40px">
+                                            <i class="stepper-check fas fa-check"></i>
+                                            <span class="stepper-number">2</span>
+                                        </div>
+                                        <!--begin::Icon-->
+        
+                                        <!--begin::Label-->
+                                        <div class="stepper-label">
+                                            <h3 class="stepper-title">
+                                                Pas0 2
+                                            </h3>
+        
+                                            <div class="stepper-desc">
+                                                Registro de presupuesto
+                                            </div>
+                                        </div>
+                                        <!--end::Label-->
+                                    </div>
+                                    <!--end::Wrapper-->
+        
+                                    <!--begin::Line-->
+                                    <div class="stepper-line h-40px"></div>
+                                    <!--end::Line-->
+                                </div>
+                                <!--end::Step 2-->
+        
+                            </div>
+                            <!--end::Nav-->
+
+                            <!--begin::Group de los Stepers-->
+                            <!-- <div class="px-1 mb-5 scroll-y mh-300px"> -->
+                            <div class="px-1 mb-1 ">
+                                
+                                <!--begin::Step 1-->
+                                <div class="flex-column current" data-kt-stepper-element="content">
+
+                                    <!-- Inicio pagina Steeper 1 -->
+
+                                    <span class="text-warning" >Seleccione los requerimientos que utilizara en el proceso de contratacion</span>
+
+                                    
+                                    <!-- ------------- TABLA REQUERIMIENTOS --------------------------- -->
+                                    
+                                    <!--begin::Search-->
+                                    <div class="d-flex align-items-center position-relative my-1">
+                                        <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-4"
+                                        ><span class="path1"></span><span class="path2"></span>
+                                        </i>
+                                        <input matInput  #input
+                                        (keyup)="applyFilter($event)"
+                                        type="text"
+                                        class="form-control form-control-solid w-300px ps-12"
+                                        placeholder="Buscar"
+                                        />
+                                    </div>
+                                    <!--end::Search-->
+                                    
+                                    <table matSort mat-table [dataSource]="dataSource" class="table align-middle table-row-dashed fs-6 gy-5">
+                                        <ng-container matColumnDef="select">
+                                            <th mat-header-cell *matHeaderCellDef>
+                                            <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                                            [checked]="selection.hasValue() && isAllSelected()"
+                                                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                            </mat-checkbox>
+                                            </th>
+                                            <td style="width: 40px;" mat-cell *matCellDef="let row">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                            (change)="onChangeDemo($event, row)"
+                                                            [checked]="selection.isSelected(row)">
+                                            </mat-checkbox>
+                                            </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="id">
+                                            <th style="width: 30px;" mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="requerimiento">
+                                            <th style="width: 300px;" mat-header-cell *matHeaderCellDef mat-sort-header> Requerimiento </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.requerimiento}} </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="unidad">
+                                            <th style="width: 30px;" mat-header-cell *matHeaderCellDef mat-sort-header> Unidad </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.unidad}} </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="cantidad">
+                                            <th style="width: 80px;" mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="actual">
+                                            <th style="width: 80px;" mat-header-cell *matHeaderCellDef mat-sort-header> Presupuesto </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.actual}} </td>
+                                        </ng-container>
+                                        
+                                        <ng-container matColumnDef="partida">
+                                            <th style="width: 50px;" mat-header-cell *matHeaderCellDef mat-sort-header> Partida </th>
+                                            <td mat-cell *matCellDef="let element"> {{element.partida}} </td>
+                                        </ng-container>
+                                        
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onSel(row)" 
+                                            [class.selected-row]="selection.isSelected(row)" class="table-row">
+                                        </tr>
+                                        
+                                        <tr class="mat-row" *matNoDataRow>
+                                            <td class="mat-cell" colspan="4">No existen coincidencias con el filtro "{{input.value}}"</td>
+                                        </tr>
+                                    </table>
+                                    <mat-paginator [pageSize]="5" ></mat-paginator>
+
+                                    <!-- -------------------------------------------------------------------- -->
+
+                                    <!-- Fin pagina Steeper 1 -->
+
+                                </div>
+                                <!--end::Step 1-->
+        
+                                <!--begin::Step 2-->
+                                <div class="flex-column" data-kt-stepper-element="content">
+
+                                    <!-- Inicio pagina Steeper 2 -->
+
+                                    <span class="text-warning" >Registre los items objeto del proceso de contratacion</span>
+
+                                    <!-- ---------------- Ejemplo de tabla editable ---------------------
+                                    https://muhimasri.com/blogs/part-4-validate-table-rows-and-fields-with-angular-material/
+                                    ----------------------------------------------------------------------- -->
+
+                                    <!-- ------------- TABLA ITEMS PROCESO --------------------------- -->
+                                    <div >
+                                        <button (click)="removeSelectedRows()" class="btn btn-danger btn-sm float-end" > Eliminar filas </button>
+                                        <button (click)="addRow()" class="btn btn-primary btn-sm float-end"> Añadirr filas </button>
+                                    </div>
+
+
+                                    <table mat-table [dataSource]="dataSourceItems" class="table table-striped gy-7 gs-7">
+
+                                        <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchemaItems">
+
+                                            <!-- ------- Encabezados --------------- -->
+                                            <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key"  class="fw-semibold fs-6 text-gray-800 border-bottom border-gray-200">
+                                                
+                                                <span *ngSwitchCase="'isSelected'">
+                                                    <mat-checkbox
+                                                        (change)="selectAllTablaItems($event)"
+                                                        [checked]="isAllSelectedTablaItems()"
+                                                        [indeterminate]="!isAllSelectedTablaItems() && isAnySelectedTablaItems()"
+                                                    ></mat-checkbox>
+                                                </span>
+
+                                                <span *ngSwitchDefault>{{ col.label }}</span>
+                                            </th>
+
+                                            <td mat-cell *matCellDef="let element" class="fw-semibold text-gray-800">
+
+                                                <!-- -------------- Modo normal --------------- --> 
+                                                <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+
+                                                    <!-- Checkbox -->
+                                                    <ng-container *ngSwitchCase="'isSelected'">
+                                                        <mat-checkbox
+                                                        (change)="element.isSelected = $event.checked"
+                                                        [checked]="element.isSelected"
+                                                        ></mat-checkbox>
+                                                    </ng-container>
+
+                                                    <!-- Botones -->
+                                                    <div *ngSwitchCase="'button'">
+                                                        <button 
+                                                            (click)="editRow(element)"
+                                                            title="Editar"
+                                                            class="btn btn-light-success btn-sm">
+                                                            <!-- (click)="element.isEdit = !element.isEdit" -->
+                                                            <i class="bi bi-pencil-fill"></i>
+                                                        </button>
+
+                                                        <button 
+                                                            (click)="removeRow(element)"
+                                                            title="Eliminar"
+                                                            class="btn btn-light-danger btn-sm" >
+                                                            <i class="bi bi-trash-fill"></i>
+                                                        </button>
+                                                    </div>
+
+                                                    <!-- Fechas -->
+                                                    <span *ngSwitchCase="'date'">
+                                                        {{ element[col.key] | date: 'mediumDate' }}
+                                                    </span>
+
+                                                    <!-- Normal -->
+                                                    <span *ngSwitchDefault>
+                                                        {{ element[col.key] }}
+                                                    </span>
+
+                                                    <span *ngSwitchCase="'title'">
+                                                        {{ element[col.key] | json | titlecase  }}
+                                                    </span>
+
+                                                    <span  *ngSwitchCase="'number'">
+                                                        {{ element[col.key] }}
+                                                    </span>
+
+                                                </div>
+
+                                                <!-- --------------- Modo edicion ------------------------ -->
+                                                <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+
+                                                  <!-- <div class="fv-row w-100 flex-md-root"></div> -->
+
+                                                    <!-- <div *ngSwitchCase="'isSelected'"></div> -->
+
+                                                    <div *ngSwitchCase="'button'">
+                                                        <button 
+                                                            (click)="saveRow(element)"
+                                                            [disabled]="disableSubmit(element.id)"
+                                                            title="Save"
+                                                            class="btn btn-light-success btn-sm" >
+                                                            <i class="bi bi-check-lg"></i>
+                                                        </button>
+                                                        <button  
+                                                            (click)="cancelRow(element)"
+                                                            class="btn btn-light-warning btn-sm" >
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+
+                                                    <span *ngSwitchCase="'select'">
+                                                        <select 
+                                                            class="form-select form-select-solid" 
+                                                            data-control="select2" 
+                                                            data-placeholder="Seleccione" 
+                                                            name="target_assign"
+                                                            style="width: 100px;"
+                                                            [required]="col.required"
+                                                            [(ngModel)]="element[col.key]"
+                                                            >
+                                                            <option *ngFor="let unidad of combosProceso.unidadMedida" [value]="unidad.id" >{{ unidad.descripcion }}</option>
+                                                        </select>
+                                                    </span>
+
+                                                    <span *ngSwitchCase="'selectUnidadMedida'">
+                                                        <select 
+                                                            class="form-select form-select-solid" 
+                                                            data-control="select2" 
+                                                            data-placeholder="Seleccione" 
+                                                            style="width: 100px;"
+                                                            [(ngModel)]="element.unidad"  
+                                                            name="unidad_{{element.id}}"  
+                                                            [required]="col.required">
+                                                            <option *ngFor="let unidad of combosProceso.unidadMedida" [value]="unidad.descripcion" >{{ unidad.descripcion }}</option>
+                                                        </select>
+                                                    </span>
+
+                                                    <span *ngSwitchCase="'selectPartida'">
+                                                        <select 
+                                                            class="form-select form-select-solid" 
+                                                            data-control="select2" 
+                                                            data-placeholder="Seleccione" 
+                                                            style="width: 100px;"
+                                                            [(ngModel)]="element.partida"  
+                                                            name="partida_{{element.id}}"  
+                                                            [required]="col.required">
+                                                            <option *ngFor="let unidad of combosPartidas" [value]="unidad.partida">
+                                                                {{ unidad.partida }}
+                                                            </option>
+                                                        </select>
+                                                    </span>
+
+                                                    <input *ngSwitchDefault
+                                                        [(ngModel)]="element[col.key]"
+                                                        name="{{ col.key }}_{{ element.id }}"  
+                                                        class="form-control mb-2"
+                                                        [style]="col.style"
+                                                        [required]="col.required"
+                                                        [disabled]="col.disabled"
+                                                        [hidden]="col.hidden"
+                                                        [ngStyle]="{
+                                                            'min-width': col.key === 'requerimiento' ? '300px' : col.key === 'cantidad' ? '50px' : '100px'
+                                                        }"
+                                                        (change)="inputHandler($event, element.id, col.key)"
+                                                    />
+                                                    <!-- [ngStyle]="col.key === 'requerimiento' ? {'min-width': '300px'} : {'min-width': '100px'}"  -->
+
+                                                </div>
+                                                
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumnsItems"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumnsItems"></tr>
+                                    </table>
+
+                                    <!-- Fin pagina Steeper 1 -->
+
+                                </div>
+                                <!--begin::Step 1-->
+        
+                            </div>
+                            <!--end::Group de los Stepers-->
+                            
+                        </div>
+                        <!--end::Stepper-->
+                    </div>
+        
+                    <div class="modal-footer px-10 d-flex flex-stack">
+                        <!--begin::Wrapper-->
+                        <div class="me-2">
+                            <button type="button" class="btn btn-light btn-active-light-primary" data-kt-stepper-action="previous">
+                                Atras
+                            </button>
+                        </div>
+                        <!--end::Wrapper-->
+        
+                        <!--begin::Wrapper-->
+                        <div>
+                            <button type="button" (click)="stepSubmitModal()" class="btn btn-primary" data-kt-stepper-action="submit">
+                                Seleccionar Requerimientos
+                            </button>
+        
+                            <button type="button" (click)="stepSiguinteModal()"  [disabled]="isNextButtonDisabled()"  class="btn btn-primary" data-kt-stepper-action="next">
+                                Siguiente
+                            </button>
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+
+        </div>
+        <!--end::Modal content-->
+
+    </div>
+    <!--end::Modal dialog-->
+
+</div>
+<!--end::Modal - Add task-->
+  
+
+<!-- ----------  MODAL IMPRESION PROCESOS   --------------------------------- -->
+<!--begin::Modal - Add task-->
+<!-- ------------------------------------------------------- -->
+<div class="modal fade" id="kt_modal_imprimir_proceso" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" >
+
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-1000px">
+  
+        <!--begin::Modal content-->
+        <div class="modal-content">
+
+            <!--begin::Modal header-->
+            <div class="modal-header" id="kt_modal_add_user_header">
+
+                <!--begin::Modal title-->
+                <h2 class="fw-bold">Impresion de reportes </h2>
+                <!--end::Modal title-->
+
+                <!--begin::Close-->
+                <div (click)="cerrarX()" class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" >
+                <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                </div>
+                <!--end::Close-->
+
+            </div>
+            <!--end::Modal header-->
+
+            <!--begin::Modal body-->
+            <div class="modal-body px-10">
+
+                <app-proceso-imprimir [idproceso]="idsolicitudseleccionada" />
+
+                
+                <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Solicitud de contratacion:</td>
+                        <td>
+                            <button (click)="printSolContrat()"  class="btn btn-primary"  >
+                                Imprimir
+                            </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="modal-footer px-10 d-flex flex-stack">
+
+                <!--begin::Wrapper-->
+                <div>
+                    <button type="button" (click)="cerrarModalImpresion()" class="btn btn-primary" data-kt-stepper-action="submit">
+                        Cerrar
+                    </button>
+                </div>
+                <!--end::Wrapper-->
+            </div>
+
+            <!--end::Modal body-->
+
+        </div>
+        <!--end::Modal content-->
+
+    </div>
+    <!--end::Modal dialog-->
+
+</div>
+<!--end::Modal - Add task-->
+  

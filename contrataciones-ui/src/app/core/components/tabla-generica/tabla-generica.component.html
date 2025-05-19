@@ -1,0 +1,294 @@
+
+<!--begin::Card-->
+ <div class="card">
+
+  <!--begin::Card header-->
+  <div class="card-header border-0 pt-6">
+
+      <!--begin::Card title-->
+      <div class="card-title">
+
+        <!-- --------------- Par el filtro --------------------- -->
+
+        @if (columnaFiltro) {
+
+            <!--begin::filtro-->
+            <label class="required form-label">Filtrar por {{ columnaFiltroLabel }}:</label>
+
+            <div class="fv-row w-100 flex-md-root">
+
+                <select  id="filtro"  (change)="applySelectFilter($event)" class="form-select form-select-solid fw-bold" >
+                    <option value="">Todos</option>
+                    <option *ngFor="let option of filtroOpciones" [value]="option">{{ option }}</option>
+                </select>
+
+            </div>
+            <!--end::Input group-->
+            <!-- <div class="d-flex align-items-center position-relative my-1">
+                <input matInput #input (keyup)="applySearchFilter($event)" type="text" class="form-control form-control-solid w-300px ps-12" placeholder="Buscar" />
+            </div> -->
+
+        }
+
+        <!-- -------------------------------------------------------------- -->
+        
+      </div>
+      <!--begin::Card title-->
+
+      <!--begin::Card toolbar-->
+      <div class="card-toolbar">
+
+        <!--begin::Search-->
+        <div class="d-flex align-items-center position-relative my-1">
+            <i class="ki-duotone ki-magnifier fs-3 position-absolute ms-4"
+              ><span class="path1"></span><span class="path2"></span>
+            </i>
+
+            <!-- (keyup)="applyFilter($event)" -->
+            <input matInput  #input
+            (keyup)="applySearchFilter($event)"
+              type="text"
+              class="form-control form-control-solid w-300px ps-12"
+              placeholder="Buscar"
+            />
+        </div>
+          <!--end::Search-->
+          
+
+        @if (tablaOpciones.btnNuevo) {
+            <!--begin::Toolbar-->
+            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                
+                <button 
+                    type="button" 
+                    (click)="btnNuevo.emit(true)"    
+                    class="btn btn-primary"  >
+                    <i class="ki-duotone ki-plus fs-2"></i> Nuevo 
+                </button>
+            
+            </div>
+            <!--end::Toolbar-->  
+        }
+          
+
+      </div>
+      <!--end::Card toolbar-->
+
+  </div>
+  <!--end::Card header-->
+
+  <!--begin::Card body-->
+  <div class="card-body py-4">
+
+      <!--begin::Table-->
+      
+      <!-- ------------------- TABLA ----------------------------- -->
+
+      <table matSort mat-table [dataSource]="dataSource" class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+
+        <ng-container [matColumnDef]="col.key" *ngFor="let col of esquemaColumna">
+    
+            <!-- -------- Encabezados ---------------- -->
+            <th mat-sort-header [style]="col.style"  [hidden]="col.hidden" mat-header-cell *matHeaderCellDef [ngSwitch]="col.key" class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+                <span *ngSwitchDefault>{{ col.label }}</span>
+            </th>
+                
+            <!-- -------- Filas ---------------- -->
+            <td mat-cell *matCellDef="let element" [hidden]="col.hidden"  class="fw-semibold text-gray-800">
+    
+                <!-- ----------- Si NO esta en modo edicion ------------------ -->
+                <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+
+                    <!-- --------- Columna de Acciones ------------------ -->
+                    <div *ngSwitchCase="'button'" >
+
+                        @if (tablaOpciones) {
+                            @if (tablaOpciones.btnEditarEnTabla)  {
+                                <button 
+                                    (click)="element.isEdit = !element.isEdit" 
+                                    title="Editar en tabla"
+                                    class="btn btn-light-success btn-sm">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
+                            }
+    
+                            @if (tablaOpciones.btnEliminar)  {
+                                <button  
+                                    (click)="btnEliminar.emit(element.id)"
+                                    title="Eliminar"
+                                    class="btn btn-light-danger btn-sm" >
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            }
+    
+                            @if (tablaOpciones.btnCustom) {
+                                <button  
+                                    (click)="btnCustom.emit(element)"
+                                    [title]="tablaOpciones.btnCustom.tooltip"
+                                    [ngClass]="tablaOpciones.btnCustom.colorClass"
+                                    class="btn btn-sm">
+                                    
+                                    <span [innerHTML]="tablaOpciones.btnCustom.icono"></span>
+                                </button>
+                                <!-- matTooltip="Eliminar registro" -->
+                            }
+
+                            @if (tablaOpciones.btnCustom1) {
+                                <button  
+                                    (click)="btnCustom1.emit(element)"
+                                    [title]="tablaOpciones.btnCustom1.tooltip"
+                                    [ngClass]="tablaOpciones.btnCustom1.colorClass"
+                                    class="btn btn-sm">
+                                    
+                                    <span [innerHTML]="tablaOpciones.btnCustom1.icono"></span>
+                                </button>
+                            }
+
+                            @if (tablaOpciones.btnCustom2) {
+                                <button  
+                                    (click)="btnCustom2.emit(element)"
+                                    [title]="tablaOpciones.btnCustom2.tooltip"
+                                    [ngClass]="tablaOpciones.btnCustom2.colorClass"
+                                    class="btn btn-sm">
+                                    
+                                    <span [innerHTML]="tablaOpciones.btnCustom2.icono"></span>
+                                </button>
+                            }
+
+                            @if (tablaOpciones.btnCustom3) {
+                                <button  
+                                    (click)="btnCustom3.emit(element)"
+                                    [title]="tablaOpciones.btnCustom3.tooltip"
+                                    [ngClass]="tablaOpciones.btnCustom3.colorClass"
+                                    class="btn btn-sm">
+                                    
+                                    <span [innerHTML]="tablaOpciones.btnCustom3.icono"></span>
+                                </button>
+                            }
+
+                            
+                        }
+
+                        
+        
+                    </div>
+
+                    <span *ngSwitchCase="'avatar'"  class="d-flex align-items-center">
+                        
+                        <!--begin:: Avatar -->
+                        <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+                            <a data-bs-target="#kt_modal_info" data-bs-toggle="modal"  style="cursor: pointer;">
+                                <div class="symbol-label">
+                                    <img src="assets/img/svg/blank-image-dark.svg" alt="Emma Smith" class="w-100" style="background-color: rgb(235, 235, 235);" />
+                                </div>
+                            </a>
+                        </div>
+                        <!--end::Avatar-->
+
+                        <!--begin::User details-->
+                        <div class="d-flex flex-column">
+                            <a data-bs-target="#kt_modal_info" data-bs-toggle="modal"  style="cursor: pointer;"
+                                class="text-gray-800 text-hover-primary mb-1">
+                                {{ (element['nombres'] + " " + element['paterno'] + " "+ element['materno'] | json ) | titlecase  }}
+                            </a>
+                            <!-- <span>smith@kpmg.com</span> -->
+                        </div>
+                        <!--begin::User details-->
+
+                    </span>
+
+                    <span *ngSwitchCase="'text'" >
+                        {{ element[col.key]  }}
+                    </span>
+
+                    <span *ngSwitchCase="'title'">
+                        {{ element[col.key] | json | titlecase  }}
+                    </span>
+
+                    <span  *ngSwitchCase="'number'">
+                        {{ element[col.key] }}
+                    </span>
+                    
+                    <span *ngSwitchCase="'subnivel'">
+                        @if (col.keysubnivel) {
+                            {{ element[col.key][col.keysubnivel] }}
+                        }
+                    </span>
+        
+                    <span *ngSwitchCase="'date'">
+                        {{ element[col.key] | date: 'dd/MM/yyyy'}}
+                    </span>
+
+                    <span *ngSwitchCase="'checkbox'" >
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                [checked]="element[col.key]" 
+                                onclick="return false;" />
+                        </div>
+                    </span>
+
+                    <span *ngSwitchDefault >
+                        {{ element[col.key] }}
+                    </span>
+                </div>
+    
+                <!-- ----------- Si esta en modo edicion ------------------ -->
+                <div [ngSwitch]="col.type" *ngIf="element.isEdit" >
+        
+                    <div class="fv-row w-100 flex-md-root">
+                        <!-- --------- Columna de Acciones ------------------ -->
+                        <!-- (click)="btnEditar.emit(element); element.isEdit = !element.isEdit" -->
+                        <div *ngSwitchCase="'button'">
+                            <button  
+                                (click)="saveRow(element)"
+                                [disabled]="disableSubmit(element.id)" 
+                                class="btn btn-light-success btn-sm" >
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+                            <button  
+                                (click)="cancelRow(element)"[disabled]="disableSubmit(element.id)" 
+                                class="btn btn-light-danger btn-sm" >
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+
+                        <input  *ngSwitchDefault
+                            class="form-control mb-2"
+                            [type]="col.type"
+                            style="width: 100px;"
+                            [required]="col.required" 
+                            [disabled]="col.disabled"
+                            [hidden]="col.hidden"
+                            [(ngModel)]="element[col.key]"                            
+                        />
+
+                    </div>
+
+                </div>
+            </td>
+    
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnasMostradas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnasMostradas"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No hay datos que coincidan con el filtro "{{input.value}}"</td>
+        </tr>
+    </table>
+      <mat-paginator ></mat-paginator>
+      <!-- <mat-paginator [length]="dataSource.data.length"
+               [pageSize]="5"
+               [pageSizeOptions]="[5, 10, 25]"
+               [pageIndex]="0">
+        </mat-paginator> -->
+
+      <!--end::Table-->
+
+  </div>
+  <!--end::Card body-->
+</div>
+<!--end::Card-->
+

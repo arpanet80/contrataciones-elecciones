@@ -1,0 +1,30 @@
+<div class="d-flex ">
+    <label class="form-label">Documentos de solicitud de proceso</label>
+</div>
+
+
+<div class="d-flex justify-content-center">
+    <button (click)="printSolContrat()"  class="btn btn-primary btn-sm"  >Solicitud</button> &nbsp;
+    <button (click)="printEspecificaciones()"  class="btn btn-warning btn-sm"  >Especificaciones</button> &nbsp;
+    <button (click)="printFUC()"  class="btn btn-danger btn-sm"  >FUC</button> &nbsp;
+    @if (esAdquisicion) {
+        <button (click)="printInexistencia()"  class="btn btn-info btn-sm"  >Inexistencia</button> &nbsp;
+    }
+</div>
+<!-- <div class="d-flex justify-content-center mt-4">
+    <button (click)="printSolContrat()" class="btn btn-success btn-sm">Imprimir todo</button>
+</div> -->
+
+<br>
+
+<div class="d-flex ">
+    <label class="form-label">Documentos de seguimiento</label>
+</div>
+<div class="d-flex justify-content-center">
+    <button (click)="printSolContrat()"  class="btn btn-primary btn-sm"  >Solicitud</button> &nbsp;
+    <button (click)="printEspecificaciones()"  class="btn btn-warning btn-sm"  >Especificaciones</button> &nbsp;
+    <button (click)="printFUC()"  class="btn btn-danger btn-sm"  >FUC</button> &nbsp;
+    @if (esAdquisicion) {
+        <button (click)="printInexistencia()"  class="btn btn-info btn-sm"  >Inexistencia</button> &nbsp;
+    }
+</div>

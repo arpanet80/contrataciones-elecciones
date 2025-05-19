@@ -1,0 +1,301 @@
+<!--begin::Row-->
+    <div class="row gx-5 gx-xl-10">
+
+        <!--begin::Col-->
+        <div class="col-xxl-8 mb-5 mb-xl-10">
+
+            <!--begin::Chart widget 8-->
+            <div class="card card-flush h-xl-100">
+
+                <!--begin::Header-->
+                <div class="card-header pt-5">
+
+                    <!--begin::Title-->
+                    <h3 class="card-title align-items-start flex-column">            
+                        <span class="card-label fw-bold text-gray-900">Plan Operativo/a</span>
+                        <!-- <span class="text-gray-500 mt-1 fw-semibold fs-6">Users from all channels</span> -->
+                    </h3>
+                    <!--end::Title-->
+
+                    <button (click)="nuevoPlan()"  type="button"  class="btn btn-sm btn-primary hover-scale">
+                        Nuevo Plan Operativo
+                    </button>
+
+                </div>
+                <!--end::Header-->
+
+                <!--begin::Body-->
+                <div class="card-body pt-6">
+
+                                
+                    <table mat-table [dataSource]="dataSource" matSort class="table" style="background-color:rgba(0, 0, 0, 0);" >
+
+                        <ng-container matColumnDef="id">
+                        <th style="width: 20px;" mat-header-cell *matHeaderCellDef mat-sort-header>Id </th>
+                        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="abreviacion">
+                        <th style="width: 70px;" mat-header-cell *matHeaderCellDef mat-sort-header>Abreviacion </th>
+                        <td mat-cell *matCellDef="let row"> {{row.abreviacion}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nombre">
+                        <th style="width: 400px;" mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Plan</th>
+                        <td mat-cell *matCellDef="let row"> {{row.nombre }} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gestion">
+                        <th style="width: 100px;" mat-header-cell *matHeaderCellDef mat-sort-header>Gestion. </th>
+                        <td mat-cell *matCellDef="let row"> {{row.gestion}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="acciones">
+                        <th style="width: 100px; text-align: center;" mat-header-cell *matHeaderCellDef> Deshabilitar </th>
+                        <td mat-cell *matCellDef="let row" style="text-align: center;">
+                            <button (click)="desahabilitar(row.id)"  type="button" class="btn btn-danger btn-sm bt hover-scale">
+                            <i class="fas  fa-ban"></i>
+                            </button>
+                        </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    </table>
+
+                    <mat-paginator class="float-start" style="background-color:rgba(0, 0, 0, 0); color: #859999"    [pageSizeOptions]="[2, 10, 25, 100]" [pageSize]="2" aria-label="Seleccione paginas"></mat-paginator>
+
+
+                </div>
+                <!--end::Body-->
+
+            </div>
+            <!--end::Chart widget 8-->
+        </div>
+        <!--end::Col-->
+
+        <!--begin::Col-->
+        <div class="col-xxl-4 mb-5 mb-xl-10">
+
+            <!--begin::Chart widget 8-->
+            <div class="card card-flush h-xl-100">
+
+                <!--begin::Header-->
+                <div class="card-header pt-5">
+
+                    <!--begin::Title-->
+                    <h3 class="card-title align-items-start flex-column">            
+                        <span class="card-label fw-bold text-gray-900">RPA</span>
+                        <!-- <span class="text-gray-500 mt-1 fw-semibold fs-6">Users from all channels</span> -->
+                    </h3>
+                    <!--end::Title-->
+
+                </div>
+                <!--end::Header-->
+
+                <!--begin::Card body-->
+        <div class="card-body">
+
+            <table mat-table [dataSource]="dataSourceRpa" matSort class="table" style="background-color:rgba(0, 0, 0, 0);" >
+  
+              <ng-container matColumnDef="nombreapellidos">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre u apellidos </th>
+                <td mat-cell *matCellDef="let row"> {{row.nombreapellidos}}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="acciones">
+                <th style="width: 50px; text-align: center;" mat-header-cell *matHeaderCellDef> Deshab. </th>
+                <td mat-cell *matCellDef="let row" style="text-align: center;">
+                  <button (click)="desahabilitarRpa(row.id)"  type="button" class="btn btn-danger btn-sm bt hover-scale">
+                    <i class="fas  fa-ban"></i>
+                  </button>
+                </td>
+              </ng-container>
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsRpa"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsRpa;"></tr>
+  
+            </table>
+  
+            <!--begin::Menu separator-->
+            <div class="separator mb-3 opacity-75"></div>
+            <!--end::Menu separator-->
+  
+            <!-- <h4>Seleccionar nuevo RPA</h4> -->
+  
+            <!-- <div class="col-4"  > -->
+              <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+                <span class="required" >Seleccionar nuevo RPA </span>
+                <span class="ms-1" data-bs-toggle="tooltip" title="Seleccione el suario que tendra el rol de  RPS" >
+                  <i class="ki-duotone ki-information-5 text-gray-500 fs-6"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                </span>
+              </label>
+  
+              <mat-select (selectionChange)="selectedRpaActivo($event.value)" class="form-control  "  >
+                <mat-option *ngFor="let item of usuariosCombo" [value]="item.id"  >
+                  {{item.nombres}} {{item.paterno}} {{item.materno}}
+                </mat-option>
+              </mat-select>
+            <!-- </div> -->
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+          </div>
+
+            </div>
+            <!--end::Chart widget 8-->
+        </div>
+        <!--end::Col-->
+    </div>
+    <!--end::Row-->
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+
+
+
+<!-- ----------  MODAL NUEVO   --------------------------------- -->
+<!--begin::Modal - Add task-->
+<div class="modal fade" id="kt_modal_add_equipo" tabindex="-1" aria-hidden="true">
+
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+  
+      <!--begin::Modal content-->
+      <div class="modal-content">
+  
+        <!-- ---- Titulo ------- -->
+        <!--begin::Modal header-->
+        <div class="modal-header" id="kt_modal_add_user_header">
+  
+          <!--begin::Modal title-->
+          <h2 class="fw-bold">Nuevo Plan Operativo</h2>
+          <!--end::Modal title-->
+  
+          <!--begin::Close-->
+           <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+          </div>
+          <!--end::Close-->
+  
+        </div>
+        <!--end::Modal header-->
+  
+        <!--begin::Modal body-->
+        <div class="modal-body px-5 my-7">
+  
+          <!--begin::Form-->
+          <form [formGroup]="form" class="form"  >
+  
+            <!--begin::Scroll-->
+            <!-- <div class="d-flex flex-column scroll-y px-5 px-lg-10" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px"> -->
+  
+              <!-- ------------- inicio Fila ------------------- -->
+              <!--begin::Tax-->
+              <div class="d-flex flex-wrap gap-5">
+  
+                <!--begin::Input group CI-->
+                <div class="fv-row w-100 flex-md-root">
+  
+                    <!--begin::Label-->
+                    <label class="required form-label">Abreviacion</label>
+                    <!--end::Label-->
+
+                    <!--begin::Input-->
+                    <input formControlName="abreviacion" type="text" class="form-control mb-2" placeholder="" [maxLength]="8" value="" />
+                    <!--end::Input-->
+
+                    <!--begin::Description-->
+                    <div class="text-muted fs-7">Solo numeros.</div>
+                    <!--end::Description-->
+
+                  </div>
+                  <!--end::Input group-->
+  
+                <!--begin::Input group CI-->
+                <div class="fv-row w-100 flex-md-root">
+  
+                    <!--begin::Label-->
+                    <label class="required form-label">Descripcion</label>
+                    <!--end::Label-->
+
+                    <!--begin::Input-->
+                    <input formControlName="nombre" type="text" class="form-control mb-2" placeholder=""  value="" />
+                    <!--end::Input-->
+
+                    <!--begin::Description-->
+                    <!-- <div class="text-muted fs-7">Solo numeros.</div> -->
+                    <!--end::Description-->
+
+                  </div>
+                  <!--end::Input group-->
+  
+                <!--begin::Input group CI-->
+                <div class="fv-row w-100 flex-md-root">
+  
+                    <!--begin::Label-->
+                    <label class="required form-label">Gestion</label>
+                    <!--end::Label-->
+
+                    <!--begin::Input-->
+                    <input formControlName="gestion" type="text" (keypress)="numberOnly($event)" [maxLength]="4"  class="form-control mb-2" placeholder=""  [value]="anio"  />
+                    <!--end::Input-->
+
+                    <!--begin::Description-->
+                    <div class="text-muted fs-7">Solo numeros.</div>
+                    <!--end::Description-->
+
+                  </div>
+                  <!--end::Input group-->
+  
+              </div>
+              <!--end:Tax-->
+              <!-- ------------- fin Fila ------------------- -->
+  
+  
+            <!-- </div> -->
+            <!--end::Scroll-->
+  
+            <!--begin::Actions-->
+            <div class="text-end pt-10">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    <button (click)="GuardarPlan()" [disabled]="form.invalid"  type="button" class="btn btn-primary" data-bs-dismiss="modal">Registrar</button>
+                </div>
+            </div>
+            <!--end::Actions-->
+          </form>
+          <!--end::Form-->
+  
+        </div>
+        <!--end::Modal body-->
+      </div>
+      <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+  </div>
+  <!--end::Modal - Add task-->
+  
+
+
+
+
+
+
+

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Despliegue Electoral - TED Potosi</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="assets/img/favicon/png">
+  
+  <!-- ---- variables de entorno ---- -->
+  <script src="env.js"></script>
+
+  <!-- ----------------- Template Keen --------------------------------------------- -->
+  <link href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" rel="stylesheet" />
+  <link href="keen/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css"/>
+  <link href="keen/css/style.bundle.css" rel="stylesheet" type="text/css"/>
+  <!-- ------------------------------------------------------------------------------------------- -->
+
+  <script>
+    // Frame-busting to prevent site from being loaded within a frame without permission (click-jacking)
+    if (window.top != window.self) {
+        window.top.location.replace(window.self.location.href);
+    }
+  </script>
+
+  <!-- Google maps -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqCGOpydvt7avRdsapP1FyqxTINlADo0k&amp;libraries=marker&amp;language=en&amp;callback=Function.prototype&amp;loading=async"></script> -->
+
+</head>
+
+<body id="kt_app_body" data-kt-app-layout="dark-sidebar" 
+      data-kt-app-header-fixed="true" data-kt-app-sidebar-enabled="true" 
+      data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true" 
+      data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" 
+      data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true"  
+      class="app-default mat-typography" >
+
+<!--begin::Theme mode setup on page load-->
+<script>
+	var defaultThemeMode = "dark";
+	var themeMode;
+
+	if ( document.documentElement ) {
+		if ( document.documentElement.hasAttribute("data-bs-theme-mode")) {
+			themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+		} else {
+			if ( localStorage.getItem("data-bs-theme") !== null ) {
+				themeMode = localStorage.getItem("data-bs-theme");
+			} else {
+				themeMode = defaultThemeMode;
+			}
+		}
+
+		if (themeMode === "system") {
+			themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+		}
+
+		document.documentElement.setAttribute("data-bs-theme", themeMode);
+	}
+</script>
+<!--end::Theme mode setup on page load-->
+
+
+  <app-root></app-root>
+
+
+  <!--begin::Javascript-->
+  <!-- <script>var hostUrl = "keen/index.html";</script> -->
+
+  <!--begin::Global Javascript Bundle(mandatory for all pages)-->
+  <script src="keen/plugins/global/plugins.bundle.js"></script>
+  <script src="keen/js/scripts.bundle.js"></script>
+  <!--end::Global Javascript Bundle-->
+
+</body>
+</html>
