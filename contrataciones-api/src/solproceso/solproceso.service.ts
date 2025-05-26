@@ -20,6 +20,7 @@ import { RequerimientoPlanSolproceso } from 'src/requerimiento-plan-solproceso/e
 import { RequerimientoProceso } from 'src/requerimiento-proceso/entities/requerimiento-proceso.entity';
 import { CertificadoPresupuestario } from 'src/certificado-presupuestario/entities/certificado-presupuestario.entity';
 import { DatosConsultoria } from 'src/datos-consultoria/entities/datos-consultoria.entity';
+import { Proveedor } from 'src/proveedor/entities/proveedor.entity';
 
 @Injectable()
 export class SolprocesoService {
@@ -42,6 +43,7 @@ export class SolprocesoService {
       @InjectRepository(RequerimientoProceso) private reqProcesoRepository: Repository<RequerimientoProceso>,
       @InjectRepository(CertificadoPresupuestario) private certificadoPresupRepository: Repository<CertificadoPresupuestario>,
       @InjectRepository(DatosConsultoria) private consultoriaRepository: Repository<DatosConsultoria>,
+      @InjectRepository(Proveedor) private proveedorRepository: Repository<Proveedor>,
       
   ) {}
 
@@ -167,6 +169,18 @@ export class SolprocesoService {
           });
 
           const itemsRgistrado = await this.reqProcesoRepository.save(itemsArray);
+
+          /////////////////////////////////////////////////////////////////
+
+          const proveedor: Proveedor = {
+            idsolicitud: solRegistrado.id,
+            razonsocial: createSolprocesoDto.razonsocial.toUpperCase(),
+            representantelegal: createSolprocesoDto.representantelegal.toUpperCase(),
+            cirepresentantelegal: createSolprocesoDto.cirepresentantelegal,
+            nit: createSolprocesoDto.nit,
+          }
+
+          const proveedorRegistrado = await this.proveedorRepository.save(proveedor);
 
           ///////////////////////////////////////////////////////////////////
 
@@ -425,7 +439,7 @@ export class SolprocesoService {
           throw new NotFoundException('No existe el registro solicitado');
         }
   
-        updateSolprocesoDto.updatedAt = new Date();
+        (updateSolprocesoDto as any).updatedAt = new Date();
         
         await this.solProcesoRepository.update({ id }, updateSolprocesoDto);
         return await this.solProcesoRepository.findOne({ where: { id } });

@@ -45,29 +45,15 @@ export class ProcesosListComponent implements OnInit{
 
   ngOnInit(): void {
 
-    // this.apiService.getRequerimientosPlanUnidadOrganiz(this.idPlanActivo, this.estadosService.estadoFuncionario()?.cargo.idunidadorganizacional
-    // ).subscribe({
-    //   next: (resp) => {
-
         this.apiService.getRpaActivo().subscribe({
           next: (rpa) => {
             this.estadosService.estadoRpa.set(rpa);
 
+            console.log(rpa);
             this.cargaDatos();
           }
         });
-    
-
-
-
-    //   },
-    //   error: (err) => {
-    //     console.error("Error al obtener los requerimientos:", err);
-    //     this.mostrarAlertaYRedirigir();
-    //   }
-    // });
-
-    
+        
   }
 
   private mostrarAlertaYRedirigir(): void {
@@ -118,10 +104,13 @@ export class ProcesosListComponent implements OnInit{
       next: (resp) => {
         this.solicitudesTablaData = resp;
 
+
+        // console.log(this.solicitudesTablaData);
+
         resp.forEach(elemento => {
           const respuesta = this.solicitudesTablaData.find(r => r.id === elemento.id);
           if (respuesta) {
-            respuesta.tipoprocesoTexto = elemento.tipoproceso.descripcion; 
+            respuesta.tipoprocesoTexto = elemento.tipoproceso.nombre; 
             // console.log(respuesta)
           }
         });

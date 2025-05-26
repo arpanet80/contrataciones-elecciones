@@ -11,6 +11,7 @@ import { TipoProceso } from '../../dashboard/models/tipo-proceso.model';
 import { ClasificadorPartida, CombosPoceso } from '../../dashboard/models/combos-proceso.model';
 import { CertificadoPresupuestario } from '../../dashboard/models/certificado-presupuestario.model';
 import { DocumentoData } from '../../dashboard/models/documento-data.model';
+import { RequerimientoProceso } from '../../dashboard/models/requerimiento-proceso';
 
 @Injectable({
   providedIn: 'root'
@@ -212,6 +213,7 @@ export class ApiService {
     .pipe<TipoProceso>(map((data: any) => data));
   }
 
+
   /////////////////////////////////////////////////////////////////////////////////
   //////////////////   CLASIFICADOR     /////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
@@ -232,6 +234,17 @@ export class ApiService {
     .pipe<CertificadoPresupuestario[]>(map((data: any) => data));
   }
 
+   /////////////////////////////////////////////////////////////////////////////////
+  //////////////////   REQUERIMIENTO PROCESO     /////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
+
+getRequerimientosProcesoByIdSolicitud(id: number): Observable<RequerimientoProceso> {
+    return this.http.get(`${this.url}requerimiento-proceso/${id}`)
+    .pipe<RequerimientoProceso>(map((data: any) => data));
+  }
+
+
   
   ////////////////////////////////////////////////////////////////////////////////
   //////////////////   DESCARGA WORD     /////////////////////////////////////////
@@ -243,6 +256,7 @@ export class ApiService {
    * @returns Observable con respuesta en formato Blob para manejar la descarga
    */
   generaWord(data: DocumentoData): Observable<Blob> {
+
     // Configurar los headers necesarios
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -251,6 +265,23 @@ export class ApiService {
 
     // La opción responseType es clave - indica que esperamos un blob
     return this.http.post(`${this.url}genera-word/descargar-docx`, data, {
+      headers: headers,
+      responseType: 'blob' // Importante para recibir el archivo como un blob
+    });
+  }
+
+  generaProceso(idSol: number): Observable<Blob> {
+
+    const body = { idSol }; // ⬅️ Esto genera el objeto { idSol: 1 }
+    
+    // Configurar los headers necesarios
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    });
+
+    // La opción responseType es clave - indica que esperamos un blob
+    return this.http.post(`${this.url}genera-word/proceso-adquisicion`, body, {
       headers: headers,
       responseType: 'blob' // Importante para recibir el archivo como un blob
     });

@@ -55,6 +55,7 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
   public resumenArray: {nombre: string, valor: string}[] = [];
   
   idPlanActivo = 3;     /// SOLO PARA ELECCIONES GENERALES
+  tipoContratacion = 0;
   
   public editorConfig = {
     toolbar: [
@@ -73,7 +74,6 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
 
   idsolicitudseleccionada= 0;
   especificacionesText = '';
-  // especificacionesFilled = false;
 
   public formIniciofContrat!: FormGroup; // Declarar la variable sin inicializar
 
@@ -103,15 +103,15 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
       observaciones: [null as string | null], 
       
       ///////// Especificaciones ///////////
-      especificaciones: ['', Validators.required],
-      justificacion: ['', Validators.required],
-      condicionescomplementarias: ['', Validators.required],
-      formalizacion: ['', Validators.required],
-      plazoentregaliteral: ['', Validators.required],
-      lugarentrega: ['', Validators.required],
-      instalacion: ['', Validators.required],
-      garantia: ['', Validators.required],
-      descripcion: ['', []], // Se inicializa sin validación requerida
+      // especificaciones: ['', Validators.required],
+      // justificacion: ['', Validators.required],
+      // condicionescomplementarias: ['', Validators.required],
+      // formalizacion: ['', Validators.required],
+      // plazoentregaliteral: ['', Validators.required],
+      // lugarentrega: ['', Validators.required],
+      // instalacion: ['', Validators.required],
+      // garantia: ['', Validators.required],
+      // descripcion: ['', []], // Se inicializa sin validación requerida
       
       //////////////// Certificacion (Formulario Anidado) ///////////////////
       certificacion: this.formCertificacion ,
@@ -140,60 +140,10 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
   
   ngOnInit(): void {
 
-    // console.log(this.estadosService.estadoFuncionario());
-    
-    // this.apiService.getRequerimientosPlanUnidadOrganiz(
-    //   this.idPlanActivo, 
-    //   this.estadosService.estadoFuncionario()?.cargo.idunidadorganizacional
-    // ).subscribe({
-    //   next: (resp) => {
+      this.inicializaStepper();
+      this.cargaDatos();
+      this.formIniciofContrat.markAllAsTouched();
 
-          this.inicializaStepper();
-          this.cargaDatos();
-          this.formIniciofContrat.markAllAsTouched();
-
-    //   },
-    //   error: (err) => {
-    //     console.error("Error al obtener los requerimientos:", err);
-    //     this.mostrarAlertaYRedirigir();
-    //   }
-    // });
-  }
-
-  private mostrarAlertaYRedirigir(): void {
-    const estadoUsuario = this.estadosService.estadoUsuario();
-
-    if (!estadoUsuario || !estadoUsuario.permisos || estadoUsuario.permisos.length === 0) {
-        console.error("Error: No se encontró el usuario o no tiene permisos definidos.");
-        return;
-    }
-
-    const rolUsuario = Number(estadoUsuario.permisos[0].idrol);
-    console.log("Rol del usuario:", rolUsuario); // 🛠 Verificar en consola
-
-    if (rolUsuario === 1) {
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No existen requerimientos importados en el plan seleccionado. Debe importar los requerimientos antes de continuar.",
-            confirmButtonText: "Aceptar",
-            confirmButtonColor: "#d33" // 🔴 Rojo oscuro
-        }).then(() => {
-            console.log("Redirigiendo a dashboard/config/importarplan");
-            this.router.navigate(['/dashboard', 'config', 'importarplan']); // ✅ Mejor forma en Angular
-        });
-    } else {
-        Swal.fire({
-            icon: "warning",
-            title: "Advertencia",
-            text: "No existen requerimientos importados en el plan seleccionado. Contáctese con el administrador.",
-            confirmButtonText: "Aceptar",
-            confirmButtonColor: "#ffc107" // 🟡 Amarillo (warning)
-        }).then(() => {
-            console.log("Redirigiendo a dashboard/home");
-            this.router.navigate(['/dashboard', 'home']); // ✅ Mejor forma en Angular
-        });
-    }
   }
 
   ngAfterViewInit(): void {
@@ -257,93 +207,65 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
       }
     });
 
-
-    // this.apiService.getAllTipoProceso().subscribe({
-    //   next: (resp) => {
-    //     this.tipoProcesoArray = resp;
-    //   }
-    // });
-    
-    // this.apiService.getCombosSolProceso().subscribe({
-    //   next: (resp) => {
-    //     this.combosProceso = resp;
-    //   }
-    // });
   }
 
+  btnSelectRequerimDisabled = true;
+  /////////// Señeccopm de los radiobox //////////////////////////
   onChangeSeleccion(selectedObject: TipoProceso) {
+
     // console.log('Objeto seleccionado:', selectedObject.nombre);
     // console.log('Objeto seleccionado:', selectedObject.id);
+    this.tipoContratacion = selectedObject.id
 
-    // const idtipoproceso: number = this.formIniciofContrat.get('idtipoproceso')?.value;
-    const tiempoEntrega = this.utilidadesService.numeroALetras( this.formIniciofContrat.get('plazoentrega')?.value );
-    const dias = this.utilidadesService.numeroALetras( this.formIniciofContrat.get('plazoentrega')?.value ).toUpperCase();
-
-    switch (selectedObject.id) {
-      case 1:               // Adquisicion
-            this.formIniciofContrat.patchValue({
-              condicionescomplementarias: '<p>Los ítems adquiridos se deberán entregar en estado <strong>NUEVO</strong></p>',
-              formalizacion: '<p>La contratación se formalizará mediante la suscripción de <strong>ORDEN DE COMPRA</strong></p>' ,
-              plazoentregaliteral: `<p>Hasta un límite de  <strong>${this.formIniciofContrat.get('plazoentrega')?.value} (${dias})</strong> días hábiles computables desde el día siguiente de a fecha de la formalización de la contratación. (El proveedor podrá realizar la entrega en un menor plazo, pero no superar lo determinado por la Unidad Solicitante).</p>`,
-              lugarentrega: '<p>La empresa adjudicada deberá realizar la entrega del o los bienes a través de una Nota de Entrega o Nota de Remisión en la Unidad de Almacenes y Servicio Generales del Tribunal Electoral Departamental de Potosí (Calle Pando esquina San Alberto Campo Ferial Multipropósito Zona Ferroviaria)</p>' ,
-              instalacion: 'No corresponde' ,
-              garantia: 'No corresponde.' ,
-            });
-        break;
-    
-      case 2:               // Servicio
-            this.formIniciofContrat.patchValue({
-              condicionescomplementarias: '',
-              formalizacion: '<p>La contratación se formalizará mediante la suscripción de <strong>ORDEN DE SERVICIO</strong>, emitida a través de la unidad de Contrataciones del Tribunal Electoral Departamental e Potosí.</p>' ,
-              plazoentregaliteral: `<p>Hasta un límite de  <strong>${this.formIniciofContrat.get('plazoentrega')?.value} (${dias})</strong> días hábiles computables desde el día siguiente de a fecha de la formalización de la contratación. (El proveedor podrá realizar la entrega en un menor plazo, pero no superar lo determinado por la Unidad Solicitante).</p>`,
-              lugarentrega: '<p>El servicio se desarrollara en instalaciones del Tribunal Electoral Departamental de Potosí calle Pando esquina San Alberto (Campo Ferial Multipropósito Zona Ferroviaria) .</p>' ,
-              instalacion: 'No corresponde' ,
-              garantia: '.' ,
-            });
-        break;
-
-      case 3:               // Personal
-          this.formIniciofContrat.patchValue({
-            plazoentrega: 0,
-            condicionescomplementarias: '',
-            formalizacion: '<p>La contratación se formalizará mediante la suscripción de <strong>ORDEN DE SERVICIO</strong>, emitida a través de la unidad de Contrataciones del Tribunal Electoral Departamental e Potosí.</p>' ,
-            plazoentregaliteral: `<p>Hasta un límite de  <strong>${this.formIniciofContrat.get('plazoentrega')?.value} (${dias})</strong> días hábiles computables desde el día siguiente de a fecha de la formalización de la contratación. (El proveedor podrá realizar la entrega en un menor plazo, pero no superar lo determinado por la Unidad Solicitante).</p>`,
-            lugarentrega: '<p>El servicio se desarrollara en instalaciones del Tribunal Electoral Departamental de Potosí calle Pando esquina San Alberto (Campo Ferial Multipropósito Zona Ferroviaria) .</p>' ,
-            instalacion: 'No corresponde' ,
-            garantia: 'No corresponde.' ,
-          });
-        break;
-    
-
-      case 4:               // Activo
-        
-        break;
-    
-      default:
-        break;
-    }
-
-    // this.formIniciofContrat.patchValue({
-    //   especificaciones: '',
-    //   justificacion: '',
-    //   condicionescomplementarias: '',
-    //   formalizacion: '',
-    //   plazoentregaliteral: '',
-    //   lugarentrega: '',
-    //   instalacion: '',
-    //   garantia: '',
-    // });
-
+    this.btnSelectRequerimDisabled = false;
 
   }
+  
+  openDialogSeleccionRequerimientos() {
+    
+    // this.especificacionesText = this.formIniciofContrat.get('especificaciones')?.value;
+
+    $("#kt_modal_seleccion_requerimientos").modal("show");
+
+    this.apiService.getRequerimientosPlanUnidadOrganiz(
+      this.idPlanActivo, 
+      this.estadosService.estadoFuncionario()?.cargo.idunidadorganizacional).subscribe({
+        next: (resp) => {
+                    
+          this.requerimientosPlanSeleccinadoArray = resp.filter(item => item.tipocontratacion === this.tipoContratacion);;
+
+          //// Para la tabla ///////////////
+          this.dataSource = new MatTableDataSource(this.requerimientosPlanSeleccinadoArray);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+
+          ///////Para que funcione el fltro //////////
+          // Aquí agregamos el filtro personalizado asegurándonos de devolver un booleano
+          this.dataSource.filterPredicate = (data: RequerimientoPlan, filter: string) => {
+            const transformedFilter = filter.trim().toLowerCase();  // Aseguramos que el filtro no tenga espacios y sea en minúsculas
+            
+            // Verificamos que las propiedades no sean undefined antes de aplicar .toLowerCase()
+            const isRequerimientoMatch = data.requerimiento ? data.requerimiento.toLowerCase().includes(transformedFilter) : false;
+            const isUnidadMatch = data.unidad ? data.unidad.toLowerCase().includes(transformedFilter) : false;
+            const isIdMatch = data.id ? data.id.toString().includes(transformedFilter) : false;
+            const isPartidaMatch = data.partida ? data.partida.toString().includes(transformedFilter) : false;
+            
+            return isRequerimientoMatch || isUnidadMatch || isIdMatch || isPartidaMatch;
+          };
+          
+        },
+    });
+  }
+
 
   guardarProceso() {
 
     this.formIniciofContrat.markAllAsTouched();
-
+    
+    
     if (!this.formIniciofContrat.invalid) {
-      // console.log('Formulario válido', this.formIniciofContrat.value);
-
+      
+      console.log('Formulario válido', this.formIniciofContrat.value);
       
       let solicitud: SolicitudProceso = this.formIniciofContrat.getRawValue() as SolicitudProceso;
       const unidadOrg = this.estadosService.estadoFuncionario()?.cargo.unidadorganizacional?.id;
@@ -357,7 +279,7 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
         solicitud.numerofojas = 0;
         // solicitud.idusuarioaprobador =  dependencia
         // solicitud.idusuariorpa = this.estadosService.planSeleccionado().
-        solicitud.idplan = this.estadosService.planSeleccionado()?.id  ?? 0;
+        solicitud.idplan = this.idPlanActivo;     //this.estadosService.planSeleccionado()?.id  ?? 0;
         
         // console.log(solicitud);// solicitud.preciounitariototal = 
 
@@ -423,7 +345,7 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
     const metselec = this.combosProceso.metodoSeleccion.find(tp => tp.id === this.formIniciofContrat.get('idmetodoseleccionadjudic')?.value);
     const nivelsalarial = this.combosProceso.nivelSalarial.find(tp => tp.id === this.formIniciofContrat.get('idnivelsalarial')?.value);
     
-    console.log("idnivelsalarial: " , this.formIniciofContrat.get('idnivelsalarial')?.value);
+    // console.log("idnivelsalarial: " , this.formIniciofContrat.get('idnivelsalarial')?.value);
     
     this.resumenArray = [
       { nombre: 'Tipo proceso', valor: tipoProceso ? tipoProceso.nombre : '' }, 
@@ -434,13 +356,13 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
       { nombre: 'Forma Adjudicacion:', valor:  formacadju ? formacadju.detalle : '' }, 
       { nombre: 'Metodo de seleccion:', valor:  metselec ? metselec.detalle : '' }, 
       { nombre: 'Codigo PAC:', valor:  this.formIniciofContrat.get('codigopac')?.value},
-      { nombre: 'Justificacion:', valor:  this.formIniciofContrat.get('justificacion')?.value},
-      { nombre: 'Especificaciones:', valor:  this.formIniciofContrat.get('especificaciones')?.value},
-      { nombre: 'Condiciones Compl.:', valor:  this.formIniciofContrat.get('condicionescomplementarias')?.value},
-      { nombre: 'Formalizacion:', valor:  this.formIniciofContrat.get('formalizacion')?.value},
-      { nombre: 'Lugar de entrega:', valor:  this.formIniciofContrat.get('lugarentrega')?.value},
-      { nombre: 'Instalacion:', valor:  this.formIniciofContrat.get('instalacion')?.value},
-      { nombre: 'Garantia:', valor:  this.formIniciofContrat.get('garantia')?.value},
+      // { nombre: 'Justificacion:', valor:  this.formIniciofContrat.get('justificacion')?.value},
+      // { nombre: 'Especificaciones:', valor:  this.formIniciofContrat.get('especificaciones')?.value},
+      // { nombre: 'Condiciones Compl.:', valor:  this.formIniciofContrat.get('condicionescomplementarias')?.value},
+      // { nombre: 'Formalizacion:', valor:  this.formIniciofContrat.get('formalizacion')?.value},
+      // { nombre: 'Lugar de entrega:', valor:  this.formIniciofContrat.get('lugarentrega')?.value},
+      // { nombre: 'Instalacion:', valor:  this.formIniciofContrat.get('instalacion')?.value},
+      // { nombre: 'Garantia:', valor:  this.formIniciofContrat.get('garantia')?.value},
     ];
 
     if (this.formIniciofContrat.get('idtipoproceso')?.value == 3) {
@@ -469,42 +391,6 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
     });
   
     return camposInvalidos;
-  }
-
-  openDialog() {
-    
-    this.especificacionesText = this.formIniciofContrat.get('especificaciones')?.value;
-
-    $("#kt_modal_seleccion_requerimientos").modal("show");
-
-    this.apiService.getRequerimientosPlanUnidadOrganiz(
-      this.idPlanActivo, 
-      this.estadosService.estadoFuncionario()?.cargo.idunidadorganizacional).subscribe({
-        next: (resp) => {
-          
-          this.requerimientosPlanSeleccinadoArray = resp;
-
-          //// Para la tabla ///////////////
-          this.dataSource = new MatTableDataSource(this.requerimientosPlanSeleccinadoArray);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-
-          ///////Para que funcione el fltro //////////
-          // Aquí agregamos el filtro personalizado asegurándonos de devolver un booleano
-          this.dataSource.filterPredicate = (data: RequerimientoPlan, filter: string) => {
-            const transformedFilter = filter.trim().toLowerCase();  // Aseguramos que el filtro no tenga espacios y sea en minúsculas
-            
-            // Verificamos que las propiedades no sean undefined antes de aplicar .toLowerCase()
-            const isRequerimientoMatch = data.requerimiento ? data.requerimiento.toLowerCase().includes(transformedFilter) : false;
-            const isUnidadMatch = data.unidad ? data.unidad.toLowerCase().includes(transformedFilter) : false;
-            const isIdMatch = data.id ? data.id.toString().includes(transformedFilter) : false;
-            const isPartidaMatch = data.partida ? data.partida.toString().includes(transformedFilter) : false;
-            
-            return isRequerimientoMatch || isUnidadMatch || isIdMatch || isPartidaMatch;
-          };
-          
-        },
-    });
   }
 
   stepSubmitModal() {
@@ -571,8 +457,7 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
         preciototal: costoTotalProceso,
         objetocontratacion: this.selectedRowsRequerimientosPlan[0].objetocontratacion
       });
-        console.log("🚀 ~ >>>>>>>>>>>>>>>>>>>>:", this.selectedRowsRequerimientosPlan)
-      
+
     }
 
 
@@ -600,6 +485,8 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
       // this.especificacionesFilled = true;
     // }
     
+    document.body.focus(); // Mueve el foco fuera del modal para evitar errores al cerrar el  modal
+    $("#kt_modal_seleccion_requerimientos").modal("hide");
   }
 
   stepSiguinteModal() {

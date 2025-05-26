@@ -97,12 +97,14 @@ export class CreateSolprocesoDto {
     @IsOptional()
     observaciones?: string;
 
+    @IsOptional({ message: '' })
     @IsString()
-    @IsNotEmpty({ message: '' })
+    // @IsNotEmpty({ message: '' })
     justificacion: string;
 
+    @IsOptional({ message: '' })
     @IsString()
-    @IsNotEmpty({ message: '' })
+    // @IsNotEmpty({ message: '' })
     especificaciones: string;
 
     @IsNotEmpty({ message: '' })
@@ -115,24 +117,29 @@ export class CreateSolprocesoDto {
     @IsInt({ message: '' })
     codigopac: number
 
+    @IsOptional({ message: '' })
     @IsString()
-    @IsNotEmpty({ message: '' })
+    // @IsNotEmpty({ message: '' })
     condicionescomplementarias:string;
 
+    @IsOptional({ message: '' })
     @IsString()
-    @IsNotEmpty({ message: '' })
+    // @IsNotEmpty({ message: '' })
     formalizacion: string;
 
+    @IsOptional({ message: '' })
     @IsString()
-    @IsNotEmpty({ message: '' })
+    // @IsNotEmpty({ message: '' })
     lugarentrega: string;
 
+    @IsOptional({ message: '' })
     @IsString()
-    @IsNotEmpty({ message: '' })
+    // @IsNotEmpty({ message: '' })
     instalacion: string;
 
+    @IsOptional({ message: '' })
     @IsString()
-    @IsNotEmpty({ message: '' })
+    // @IsNotEmpty({ message: '' })
     garantia: string;
 
     @IsOptional()
@@ -173,5 +180,23 @@ export class CreateSolprocesoDto {
     @IsOptional({ message: '' })
     @IsString()
     descripcion: string;
+
+    ////////////////// Daotos Ofertante identificado //////////////////////
+
+    @IsOptional({ message: '' })
+    @IsString()
+    razonsocial: string;
+
+    @IsOptional({ message: '' })
+    @IsString()
+    representantelegal: string;
+
+    @IsOptional({ message: '' })
+    @IsString()
+    cirepresentantelegal: string;
+
+    @IsOptional({ message: '' })
+    @IsString()
+    nit: string;
     
 }

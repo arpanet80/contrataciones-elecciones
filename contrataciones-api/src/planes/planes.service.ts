@@ -67,7 +67,7 @@ export class PlanesService {
         throw new NotFoundException('No existe el registro solicitado');
       }
 
-      updatePlaneDto.updatedAt = new Date();
+      (updatePlaneDto as any).updatedAt = new Date();
       
       await this.planRepository.update({ id }, updatePlaneDto);
       return await this.planRepository.findOne({ where: { id } });

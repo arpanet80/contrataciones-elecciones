@@ -16,6 +16,9 @@ export class Funcionario {
 
     @Column()
     documento: string;
+
+    @Column()
+    cargo: string;
     
     @Column({default: true})
     activo?: boolean;

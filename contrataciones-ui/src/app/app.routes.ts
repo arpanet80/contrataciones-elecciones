@@ -11,6 +11,7 @@ import { SaldosPlanComponent } from './dashboard/pages/plan/saldos-plan/saldos-p
 import { VerPlanComponent } from './dashboard/pages/plan/ver-plan/ver-plan.component';
 import { ConfigPlanOperativoComponent } from './dashboard/pages/configuracion/config-plan-operativo/config-plan-operativo.component';
 import { ImportarPlanOperativoComponent } from './dashboard/pages/configuracion/importar-plan-operativo/importar-plan-operativo.component';
+import { ProcesosNuevoPoeComponent } from './dashboard/pages/procesos/procesos-nuevo-poe/procesos-nuevo-poe.component';
 
 export const routes: Routes = [
     {
@@ -39,7 +40,8 @@ export const routes: Routes = [
             /////// PROCESOS DE CONTRATACION ////////////////
 
             { path: 'procesos/lista', component: ProcesosListComponent , data: { titulo: 'Listado de procesos de contratacion', subtitulo: 'Procesos de contratacion en proceso y finalizados', rutaBreadcrumbs:'Lista procesos'} ,},
-            { path: 'procesos/nuevo', component: ProcesosNuevoComponent , data: { titulo: 'Nuevo Proceso de contrtacion', subtitulo: 'Registro de nuevo proceso', rutaBreadcrumbs:'Nuevo proceso'} ,},
+            // { path: 'procesos/nuevo', component: ProcesosNuevoComponent , data: { titulo: 'Nuevo Proceso de contrtacion', subtitulo: 'Registro de nuevo proceso', rutaBreadcrumbs:'Nuevo proceso'} ,},
+            { path: 'procesos/nuevo', component: ProcesosNuevoPoeComponent , data: { titulo: 'Nuevo Proceso de contrtacion', subtitulo: 'Registro de nuevo proceso', rutaBreadcrumbs:'Nuevo proceso'} ,},
             { path: 'procesos/cotizacion', component: ProcesosCotizacionComponent , data: { titulo: 'Cotizaciones', subtitulo: 'Lista de cotizaciones realizadas', rutaBreadcrumbs:'Cotizacion'} ,},
 
 

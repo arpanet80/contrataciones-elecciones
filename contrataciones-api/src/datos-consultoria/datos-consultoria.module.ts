@@ -12,5 +12,6 @@ import { DatosConsultoria } from './entities/datos-consultoria.entity';
   ],
   controllers: [DatosConsultoriaController],
   providers: [DatosConsultoriaService],
+  exports: [DatosConsultoriaService],
 })
 export class DatosConsultoriaModule {}

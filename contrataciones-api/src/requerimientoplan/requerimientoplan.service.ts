@@ -87,7 +87,7 @@ export class RequerimientoplanService {
         throw new NotFoundException('No existe el registro solicitado');
       }
 
-      updateRequerimientoplanDto.updatedAt = new Date();
+      (updateRequerimientoplanDto as any).updatedAt = new Date();
       
       await this.requerimientoPlanRepository.update({ id }, updateRequerimientoplanDto);
       return await this.requerimientoPlanRepository.findOne({ where: { id } });

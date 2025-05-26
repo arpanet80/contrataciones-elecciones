@@ -81,7 +81,7 @@ export class Requerimientoplan {
         this.updatedAt = new Date();
     }
 
-    ///////////////////////// desde aqui ara POE /////////////////////////////////////
+    ///////////////////////// desde aqui para POE /////////////////////////////////////
 
     @Column()
     fechaimporte: Date;

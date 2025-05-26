@@ -12,5 +12,6 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   controllers: [RequerimientoProcesoController],
   providers: [RequerimientoProcesoService],
+  exports: [RequerimientoProcesoService], // 🔁 Exporta el servicio para que otros módulos lo usen
 })
 export class RequerimientoProcesoModule {}

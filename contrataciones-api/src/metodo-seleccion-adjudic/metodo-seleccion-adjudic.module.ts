@@ -12,5 +12,6 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   controllers: [MetodoSeleccionAdjudicController],
   providers: [MetodoSeleccionAdjudicService],
+  exports: [MetodoSeleccionAdjudicService],
 })
 export class MetodoSeleccionAdjudicModule {}

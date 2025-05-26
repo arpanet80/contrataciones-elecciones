@@ -12,5 +12,6 @@ import { Funcionario } from './entities/funcionario.entity';
     ],
   controllers: [FuncionariosController],
   providers: [FuncionariosService],
+  exports: [FuncionariosService],
 })
 export class FuncionariosModule {}

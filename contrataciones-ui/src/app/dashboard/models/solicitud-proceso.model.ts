@@ -37,6 +37,11 @@ export interface SolicitudProceso {
   numerofojas: number;
 
   codigopac: number
+
+  razonsocial?: string,
+  representantelegal?: string,
+  cirepresentantelegal: string,
+  nit?: string,
   
   ////////// Personal ////////////
   idnivelsalarial: number
@@ -87,7 +92,7 @@ export const SolicitudProcesoColumns = [
     hidden: false
   },
   {
-    key: 'cantitadtotal',
+    key: 'cantidadtotal',
     type: 'text',
     label: 'Cantidad',
     style: 'width: 4%',
@@ -97,7 +102,7 @@ export const SolicitudProcesoColumns = [
   },
   {
     key: 'preciounitariototal',
-    type: 'title',
+    type: 'text',
     label: 'Unitario',
     style: 'width: 10%;',
     required: true,
@@ -106,7 +111,7 @@ export const SolicitudProcesoColumns = [
   },
   {
     key: 'preciototal',
-    type: 'txt',
+    type: 'text',
     label: 'Total',
     style: 'width: 10%;',
     required: false,
@@ -116,7 +121,7 @@ export const SolicitudProcesoColumns = [
   {
     key: 'fechasolicitud',
     type: 'date',
-    label: 'Fecha',
+    label: 'Fecha de inicio',
     style: 'width: 10%;',
     required: false,
     disabled: true,

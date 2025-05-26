@@ -20,18 +20,22 @@ import { RequerimientoPlanSolproceso } from 'src/requerimiento-plan-solproceso/e
 import { RequerimientoProceso } from 'src/requerimiento-proceso/entities/requerimiento-proceso.entity';
 import { CertificadoPresupuestario } from 'src/certificado-presupuestario/entities/certificado-presupuestario.entity';
 import { DatosConsultoria } from 'src/datos-consultoria/entities/datos-consultoria.entity';
+import { ProveedorModule } from 'src/proveedor/proveedor.module';
+import { Proveedor } from 'src/proveedor/entities/proveedor.entity';
 
 @Module({
   imports: [
       TypeOrmModule.forFeature([Solproceso, Tipoproceso, FormaAdjudicacion, FormaContratacion, Funcionario, 
         MetodoSeleccionAdjudic, Plan, EstadoProceso, Clasificador, UnidadMedida, DocumentoReferencia, 
         NivelSalarial, Rpa, RequerimientoPlanSolproceso, RequerimientoProceso, CertificadoPresupuestario,
-        DatosConsultoria
+        DatosConsultoria, Proveedor
       ]),
       JwtModule.register({}),
       // HttpModule
     ],
   controllers: [SolprocesoController],
   providers: [SolprocesoService],
+  exports: [SolprocesoService], // 🔁 Exporta el servicio para que otros módulos lo usen
+
 })
 export class SolprocesoModule {}

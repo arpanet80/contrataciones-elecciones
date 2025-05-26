@@ -12,5 +12,6 @@ import { Clasificador } from './entities/clasificador.entity';
   ],
   controllers: [ClasificadorController],
   providers: [ClasificadorService],
+  exports: [ClasificadorService], // 🔁 Exporta el servicio para que otros módulos lo usen
 })
 export class ClasificadorModule {}

@@ -12,5 +12,6 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   controllers: [FormaAdjudicacionController],
   providers: [FormaAdjudicacionService],
+  exports: [FormaAdjudicacionService],
 })
 export class FormaAdjudicacionModule {}
