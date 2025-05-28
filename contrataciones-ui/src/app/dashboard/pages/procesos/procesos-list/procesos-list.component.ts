@@ -34,7 +34,7 @@ export class ProcesosListComponent implements OnInit{
     btnCustom: {
       icono: '<i class="bi bi-pencil-fill"></i>',
       colorClass: 'btn-light-success',
-      tooltip: 'Editar'
+      tooltip: 'Registrar informes'
     },
     btnCustom1: {
       icono: '<i class="bi bi-printer-fill"></i>',

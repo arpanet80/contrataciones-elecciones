@@ -1,6 +1,7 @@
 import { Controller, Post, Res, Body } from '@nestjs/common';
 import { Response } from 'express';
 import { GeneraWordService } from './genera-word.service';
+import { copySync } from 'fs-extra';
 
 @Controller('genera-word')
 export class GeneraWordController {
@@ -22,6 +23,7 @@ export class GeneraWordController {
   @Post('proceso-adquisicion')
   async descargarProceso(@Body() body: any, @Res() res: Response) {
     const idSol = Number(body.idSol); 
+
     const docBuffer = await this.generaWordService.generaProcesoAdquisicion(idSol);
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');

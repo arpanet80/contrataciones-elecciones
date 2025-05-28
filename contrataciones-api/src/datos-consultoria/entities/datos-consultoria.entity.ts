@@ -18,6 +18,9 @@ export class DatosConsultoria {
     @Column()
     honorariomensual: number;
 
+    @Column()
+    numerocasos: number;
+
     @Column({default: true})
     activo?: boolean;
 

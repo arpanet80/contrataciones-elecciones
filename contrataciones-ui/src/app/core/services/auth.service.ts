@@ -48,6 +48,7 @@ export class AuthService {
     return this.http.post<LoginResponse>(url, credenciales).pipe(
       tap(({ userInfo, token }) => {
         if (token) {
+          console.log(userInfo);
           this.estadoUsuario.set(userInfo);
           this.tokenService.setStorageToken({ userInfo, token });
         }

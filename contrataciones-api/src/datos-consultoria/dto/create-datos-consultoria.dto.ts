@@ -18,6 +18,11 @@ export class CreateDatosConsultoriaDto {
     @IsInt({ message: '' })
     tiempocontrato: number;
 
+    @IsNotEmpty({ message: '' })
+    @Type(() => Number)
+    @IsInt({ message: '' })
+    numerocasos: number;
+
     @IsNotEmpty({ message: 'El campo importe no puede estar vacío.' })
     @IsNumber({maxDecimalPlaces: 2})
     honorariomensual: number;

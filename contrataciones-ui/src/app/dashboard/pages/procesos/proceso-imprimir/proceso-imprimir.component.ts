@@ -73,8 +73,6 @@ export class ProcesoImprimirComponent  implements OnChanges{
         this.isGenerating = false;
       }
     });
-
-
   }
 
   private descargarDocumento(blob: Blob): void {

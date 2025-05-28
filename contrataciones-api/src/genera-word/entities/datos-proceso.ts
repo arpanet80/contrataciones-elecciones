@@ -1,8 +1,4 @@
 export interface DatosProceso {
-  // nombre: string;
-  // fecha: string;
-  // contenido: string;
-
   fechaliteral?: string;
   cite?: string;
   objeto?: string;
@@ -22,12 +18,25 @@ export interface DatosProceso {
 
   razonsocial?: string,
   representantelegal?: string,
-  cirepresentantelegal: string,
+  cirepresentantelegal?: string,
   nit?: string,
 
-  idnivelsalarial?: string,
+  nivelsalarial?: string,
   honorariomensual?: string,
   numerocasos?: string,
-  observaciones?: string
+  observaciones?: string,
 
+  items?: Requerimiento[],
+  totalLietral?: string,
+  totalTotalGeneral?: number
+
+}
+
+export interface Requerimiento {
+  numero?: number,
+  requerimiento?: string,
+  unidad?: string,
+  cantidad?: number,
+  precioUnitario?: number,
+  precioTotal?: number
 }

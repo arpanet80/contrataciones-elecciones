@@ -116,16 +116,21 @@ export class SolprocesoService {
 
           const solRegistrado = await this.solProcesoRepository.save(solicitud);  
 
-          /////////////////////////////////////////////////////
-          const consultoria: DatosConsultoria = {
-            idsolproceso: solRegistrado.id,
-            nivelsalarial: createSolprocesoDto.idnivelsalarial,
-            tiempocontrato: createSolprocesoDto.plazoentrega,
-            honorariomensual: createSolprocesoDto.honorariomensual,
-            observaciones: createSolprocesoDto.observaciones
+          if (solRegistrado.idtipoproceso === 3) {
+            
+            //////////// consultoria ///////////////////////////////////
+            const consultoria: DatosConsultoria = {
+              idsolproceso: solRegistrado.id,
+              nivelsalarial: createSolprocesoDto.idnivelsalarial,
+              tiempocontrato: createSolprocesoDto.plazoentrega,
+              honorariomensual: createSolprocesoDto.honorariomensual,
+              observaciones: createSolprocesoDto.observaciones,
+              numerocasos: createSolprocesoDto.numerocasos
+            }
+            const consultRegistrado = await this.consultoriaRepository.save(consultoria);
+          
           }
 
-          const consultRegistrado = await this.consultoriaRepository.save(consultoria);
 
           /////////////////////////////////////////////////////
           const certArray: CertificadoPresupuestario[] = createSolprocesoDto.certificacion.registros.map(element => {
@@ -172,15 +177,18 @@ export class SolprocesoService {
 
           /////////////////////////////////////////////////////////////////
 
-          const proveedor: Proveedor = {
-            idsolicitud: solRegistrado.id,
-            razonsocial: createSolprocesoDto.razonsocial.toUpperCase(),
-            representantelegal: createSolprocesoDto.representantelegal.toUpperCase(),
-            cirepresentantelegal: createSolprocesoDto.cirepresentantelegal,
-            nit: createSolprocesoDto.nit,
-          }
+          if (solRegistrado.idtipoproceso !== 3)  {
 
-          const proveedorRegistrado = await this.proveedorRepository.save(proveedor);
+            const proveedor: Proveedor = {
+              idsolicitud: solRegistrado.id,
+              razonsocial: createSolprocesoDto.razonsocial.toUpperCase(),
+              representantelegal: createSolprocesoDto.representantelegal.toUpperCase(),
+              cirepresentantelegal: createSolprocesoDto.cirepresentantelegal,
+              nit: createSolprocesoDto.nit,
+            }
+            const proveedorRegistrado = await this.proveedorRepository.save(proveedor);
+
+          }
 
           ///////////////////////////////////////////////////////////////////
 

@@ -4,7 +4,7 @@ import * as fs from 'fs-extra';
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
 import { SolprocesoService } from 'src/solproceso/solproceso.service';
-import { DatosProceso } from './entities/datos-proceso';
+import { DatosProceso, Requerimiento } from './entities/datos-proceso';
 import { RequerimientoProcesoService } from 'src/requerimiento-proceso/requerimiento-proceso.service';
 import { ClasificadorService } from 'src/clasificador/clasificador.service';
 import { FuncionariosService } from 'src/funcionarios/funcionarios.service';
@@ -27,7 +27,7 @@ export class GeneraWordService {
   ) {}
   
   async generaProcesoAdquisicion(idSol: number): Promise<Buffer> {
-
+   
     // Verificar que los datos necesarios estén presentes
     if (!idSol || idSol <= 0) {
       throw new BadRequestException('Faltan datos requeridos para generar el documento');
@@ -44,53 +44,130 @@ export class GeneraWordService {
     const funcio = await this.funcionarioService.findOne(sol.idusuariosolicitante);
     const formAdju = await this.formAdjService.findOne(sol.idformaadjudic);
     const metodoSel = await this.metodosSelService.findOne(sol.idmetodoseleccionadjudic);
-    const proveedor = await this.proveedorService.findOne(idSol);
-    const consultor = await this.consultoriaService.findByIdSolProceso(idSol);
-    if (!funcio || !partida || !formAdju || !metodoSel || !proveedor) {
-      throw new BadRequestException('Hubo un error al recuperar el funcionario o la partida');
-    }
 
-    console.log(proveedor);
+    if (!funcio || !partida || !formAdju || !metodoSel ) {
+        throw new BadRequestException('Hubo un error al recuperar algun parametro para el rporte');
+    }
 
     const fechaliteral = this.formatearFecha(sol.fechasolicitud);
     const anio = this.obtenerAnio(new Date())
 
-    const data: DatosProceso = {
-      fechaliteral: fechaliteral,
-      cite:  `TIC-PDSE-EG-Nº ${sol.id}/${anio}`,
-      objeto: sol.objetocontratacion.toUpperCase(),
-      precionumeral: this.formatearDosDecimales(sol.preciototal).toString(),
-      precioliteral: this.numeroALetras(sol.preciototal),
-      partidanumeral: reqSolProceso[0].partida.toString(),
-      partidaliteral: partida.descripcion,
-      solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
-      cargosolicitante: funcio.cargo,
-      superior:'Juan Perez Perez',
-      cargosuperior: 'JEFE DE SECCIÓN DE TECNOLOGÍAS',
-      plazonumeral: sol.plazoentrega.toString(),
-      plazoliteral: this.quitarUltimaPalabra(this.numeroALetras(sol.plazoentrega)),
-      formaadjudicacion: formAdju.detalle,
-      metodoseleccion: metodoSel.detalle,
-      codigopac: sol.codigopac ? sol.codigopac.toString()  : '',
+    let data: DatosProceso
 
-      /////////////// EMPRESA /////////////////////////////////
-      razonsocial: proveedor.razonsocial,
-      representantelegal: proveedor.representantelegal,
-      cirepresentantelegal: proveedor.cirepresentantelegal,
-      nit: proveedor.nit,
+    //// es proceso de Personal
+    if (sol.idtipoproceso === 3) {
+      
+      const consultor = await this.consultoriaService.findByIdSolProceso(idSol);
+      if (!consultor ) {
+        throw new BadRequestException('Hubo un error al recuperar la informacion de consultoria');
+      }
 
-      //////////// personal ///////////////
+      data = {
+        fechaliteral: fechaliteral,
+        cite:  `TIC-PDSE-EG-Nº ${sol.id}/${anio}`,
+        objeto: sol.objetocontratacion.toUpperCase(),
+        precionumeral: this.formatearDosDecimales(sol.preciototal).toString(),
+        precioliteral: this.numeroALetras(sol.preciototal),
+        partidanumeral: reqSolProceso[0].partida.toString(),
+        partidaliteral: partida.descripcion,
+        solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
+        cargosolicitante: funcio.cargo,
+        superior:'Juan Perez Perez',
+        cargosuperior: 'JEFE DE SECCIÓN DE TECNOLOGÍAS',
+        plazonumeral: sol.plazoentrega.toString(),
+        plazoliteral: this.quitarUltimaPalabra(this.numeroALetras(sol.plazoentrega)),
+        formaadjudicacion: formAdju.detalle,
+        metodoseleccion: metodoSel.detalle,
+        codigopac: sol.codigopac ? sol.codigopac.toString()  : '',
+
+        //////////// personal ///////////////
+        nivelsalarial: consultor[0].nivelsalarial.toString(),
+        honorariomensual: consultor[0].honorariomensual.toString(),
+        numerocasos: consultor[0].numerocasos.toString(),
+        observaciones: consultor[0].observaciones
+      };
+      
+    }
+    else {    //// Si no es personal
+
+      const proveedor = await this.proveedorService.findOne(idSol);
+      if (!proveedor ) {
+        throw new BadRequestException('Hubo un error al recuperar la informacion del proveedor');
+      }
+
+      let arrayItems: Requerimiento[] = [];
+      let indice = 0;
+      let totalProceso:number = 0;
+
+      reqSolProceso.forEach(req => {
+        arrayItems.push({
+          numero: indice+1,
+          requerimiento: req.requerimiento,
+          unidad: req.idunidadmedida.toString(),
+          cantidad: req.cantidad,
+          precioUnitario: req.preciounitario,
+          precioTotal: req.preciototal
+        })
+        indice++;
+        totalProceso = totalProceso + Number(req.preciototal); 
+      });
+
+      // const data: DatosProceso = {
+      data = {
+        fechaliteral: fechaliteral,
+        cite:  `TIC-PDSE-EG-Nº ${sol.id}/${anio}`,
+        objeto: sol.objetocontratacion.toUpperCase(),
+        precionumeral: this.formatearDosDecimales(sol.preciototal).toString(),
+        precioliteral: this.numeroALetras(sol.preciototal),
+        partidanumeral: reqSolProceso[0].partida.toString(),
+        partidaliteral: partida.descripcion,
+        solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
+        cargosolicitante: funcio.cargo.toUpperCase(),
+        superior:'Guido Callapa Coro',
+        cargosuperior: 'GESTIÓN DE LA INFORMACIÓN DE BASE DE DATOS',
+        plazonumeral: sol.plazoentrega.toString(),
+        plazoliteral: this.quitarUltimaPalabra(this.numeroALetras(sol.plazoentrega)),
+        formaadjudicacion: formAdju.detalle,
+        metodoseleccion: metodoSel.detalle,
+        codigopac: sol.codigopac ? sol.codigopac.toString()  : '',
+
+        /////////////// EMPRESA /////////////////////////////////
+        razonsocial: proveedor.razonsocial,
+        representantelegal: proveedor.representantelegal,
+        cirepresentantelegal: proveedor.cirepresentantelegal,
+        nit: proveedor.nit,
+
+        items: arrayItems,
+
+        /*
+        items: [
+          {
+            numero: 1,
+            requerimiento: 'Extensor HDMI',
+            unidad: 'Pza',
+            cantidad: 1,
+            precioUnitario: 945,
+            precioTotal: 945,
+          },
+          {
+            numero: 2,
+            requerimiento: 'Unidad Flash USB',
+            unidad: 'Pza',
+            cantidad: 5,
+            precioUnitario: 130,
+            precioTotal: 650,
+          },
+        ],
+        */
+        totalLietral: this.numeroALetras(totalProceso),
+        totalTotalGeneral: totalProceso
+
+      };
+    }
 
 
 
-// DALTA GUARDAR Y LEER NUMERO DE CADOS
 
-
-      // idnivelsalarial: consultor[0].nivelsalarial.toString(),
-      // honorariomensual: consultor[0].honorariomensual.toString(),
-      // numerocasos: consultor[0],
-      // observaciones: string
-    };
 
     try {
 
@@ -104,6 +181,7 @@ export class GeneraWordService {
             'templates',
             'ProcesoAdquisicion.docx',
           );  
+
           break;
 
         case 2:
@@ -115,7 +193,7 @@ export class GeneraWordService {
             'ProcesoServicio.docx',
           );  
           break;
-        case 2:
+        case 3:
           templatePath = path.resolve(
             process.cwd(),
             'src',
@@ -184,6 +262,8 @@ export class GeneraWordService {
       console.error('Error en el servicio:', error);
       throw new BadRequestException('Error al generar el documento');
     }
+
+
   }
 
   generateFromTemplate(data: DocumentoData): Buffer {

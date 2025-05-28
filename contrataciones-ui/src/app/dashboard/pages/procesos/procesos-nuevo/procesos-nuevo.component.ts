@@ -288,9 +288,10 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
       }
       // console.log('solicitud', solicitud);
 
-      // console.log('Formulario válido', this.formIniciofContrat.value);
+      console.log('>>>>>>>>>>>', this.formIniciofContrat.value);
+      console.log('--------->', solicitud);
 
-
+/*
       this.apiService.addSolicitudProceso(solicitud).subscribe({
         next: (resp) => {
 
@@ -310,6 +311,7 @@ export class ProcesosNuevoComponent implements OnInit, AfterViewInit {
         }
       });
 
+      */
 
     }
     /*else {

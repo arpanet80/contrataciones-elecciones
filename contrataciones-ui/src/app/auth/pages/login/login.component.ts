@@ -38,6 +38,7 @@ export class LoginComponent  {
 
       switchMap((resp) => this.authService.getFuncionarioById(resp.userInfo.idfuncionario).pipe(
           tap((funcionario) => {
+            console.log(resp);
             this.estadosService.estadoFuncionario.set(funcionario);
             localStorage.setItem('funcionarioInfo', JSON.stringify(funcionario));
           })

@@ -20,7 +20,7 @@ import { NotificacionService } from '../../../../core/services/notificacion.serv
 import Swal from 'sweetalert2';
 import { QuillModule } from 'ngx-quill';
 import { SolicitudProceso } from '../../../models/solicitud-proceso.model';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReportsService } from '../../../../core/services/reports.service';
 import { UtilidadesService } from '../../../../core/services/utilidades.service';
 import { ProcesoImprimirComponent } from '../proceso-imprimir/proceso-imprimir.component';
@@ -34,7 +34,7 @@ declare var KTStepper: any;  // Declaración de KTStepper global que esta dentro
   imports: [ ProcesoImprimirComponent,
     FormsModule, ReactiveFormsModule, ControlMessagesComponent, CommonModule,
     MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, MatTooltipModule, MatCheckboxModule, 
-    QuillModule
+    QuillModule, RouterLink
   ],
   templateUrl: './procesos-nuevo-poe.component.html',
   styleUrl: './procesos-nuevo-poe.component.css'
