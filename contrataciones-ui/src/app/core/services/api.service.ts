@@ -12,6 +12,7 @@ import { ClasificadorPartida, CombosPoceso } from '../../dashboard/models/combos
 import { CertificadoPresupuestario } from '../../dashboard/models/certificado-presupuestario.model';
 import { DocumentoData } from '../../dashboard/models/documento-data.model';
 import { RequerimientoProceso } from '../../dashboard/models/requerimiento-proceso';
+import { InformeVerifiacion } from '../../dashboard/models/informe-verificacion.model';
 
 @Injectable({
   providedIn: 'root'
@@ -160,6 +161,28 @@ export class ApiService {
   }
 
   ////////////////////////////////////////////////////////////////////////////////
+  //////////////////   INFORME VERIFICACION     /////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
+  getAllInformeVerificacion(): Observable<InformeVerifiacion[]> {
+    return this.http.get(`${this.url}informeverificacion`)
+    .pipe<InformeVerifiacion[]>(map((data: any) => data));
+  }
+
+  addInformeVerificacion(informe: InformeVerifiacion): Observable<InformeVerifiacion> {
+    return this.http.post<InformeVerifiacion>(`${this.url}informeverificacion/`, informe);
+  }
+
+  updateInformeVerificacion(id: number, informe: InformeVerifiacion): Observable<InformeVerifiacion> {
+    return this.http.patch<InformeVerifiacion>(`${this.url}informeverificacion/${id}`, informe);
+  }
+
+  deleteInformeVerificacion(id: number): Observable<any> {
+    return this.http.delete<InformeVerifiacion>(`${this.url}informeverificacion/${id}`);
+  }
+
+
+  ////////////////////////////////////////////////////////////////////////////////
   //////////////////   SOLICITUD DE PROCESOS     /////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
 
@@ -282,6 +305,23 @@ getRequerimientosProcesoByIdSolicitud(id: number): Observable<RequerimientoProce
 
     // La opción responseType es clave - indica que esperamos un blob
     return this.http.post(`${this.url}genera-word/proceso-adquisicion`, body, {
+      headers: headers,
+      responseType: 'blob' // Importante para recibir el archivo como un blob
+    });
+  }
+
+  generaInformeVerificacion(id: number): Observable<Blob> {
+
+    const body = { id }; // ⬅️ Esto genera el objeto { idSol: 1 }
+    
+    // Configurar los headers necesarios
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    });
+
+    // La opción responseType es clave - indica que esperamos un blob
+    return this.http.post(`${this.url}genera-word/informe-verificacion`, body, {
       headers: headers,
       responseType: 'blob' // Importante para recibir el archivo como un blob
     });

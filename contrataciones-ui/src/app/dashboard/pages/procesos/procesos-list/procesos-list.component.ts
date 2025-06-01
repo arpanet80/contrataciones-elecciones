@@ -8,15 +8,22 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { TablaOpciones, TableColumnSchema } from '../../../../core/components/tabla-generica/tabla-column.model';
 import { ProcesoImprimirComponent } from '../proceso-imprimir/proceso-imprimir.component';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ControlMessagesComponent } from '../../../../core/services/validation-controls/control-messages.component';
+import { InformeVerifiacion } from '../../../models/informe-verificacion.model';
 declare var $: any;          // para usar jquery
 
 
 @Component({
   selector: 'app-procesos-list',
-  imports: [ TablaGenericaComponent, ProcesoImprimirComponent ],
+  imports: [ TablaGenericaComponent, ProcesoImprimirComponent,  ReactiveFormsModule,
+    ControlMessagesComponent
+    // FormsModule,
+   ],
   templateUrl: './procesos-list.component.html',
   styleUrl: './procesos-list.component.css'
 })
+
 export class ProcesosListComponent implements OnInit{
   private apiService = inject(ApiService);
   public estadosService = inject(EstadosService);
@@ -25,6 +32,7 @@ export class ProcesosListComponent implements OnInit{
   private changeDetectorRef = inject(ChangeDetectorRef);  // Inyectamos ChangeDetectorRef
 
   idPlanActivo = 3;     /// SOLO PARA ELECCIONES GENERALES
+  initialFormValues: any; // Guardaremos los valores iniciales
 
   solicitudesTablaData: SolicitudProceso[] = [];
   solicitudesTablaColumns: TableColumnSchema[] = SolicitudProcesoColumns;
@@ -43,59 +51,84 @@ export class ProcesosListComponent implements OnInit{
     },
   }
 
+  informeForm!: FormGroup;
+  constructor(private fb: FormBuilder) { }
+
+  getControl(nombre: string): FormControl {
+      return this.informeForm.get(nombre) as FormControl;
+    } 
+    
   ngOnInit(): void {
 
-        this.apiService.getRpaActivo().subscribe({
-          next: (rpa) => {
-            this.estadosService.estadoRpa.set(rpa);
+    this.cargaDatos();
 
-            console.log(rpa);
-            this.cargaDatos();
-          }
-        });
-        
-  }
+    ////////////// FORMULARIO /////////////////////////////////
 
-  private mostrarAlertaYRedirigir(): void {
-      const estadoUsuario = this.estadosService.estadoUsuario();
-  
-      if (!estadoUsuario || !estadoUsuario.permisos || estadoUsuario.permisos.length === 0) {
-          console.error("Error: No se encontró el usuario o no tiene permisos definidos.");
-          return;
-      }
-  
-      const rolUsuario = Number(estadoUsuario.permisos[0].idrol);
-      console.log("Rol del usuario:", rolUsuario); // 🛠 Verificar en consola
-  
-      if (rolUsuario === 1) {
-          Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "No existen requerimientos importados en el plan seleccionado. Debe importar los requerimientos antes de continuar.",
-              confirmButtonText: "Aceptar",
-              confirmButtonColor: "#d33" // 🔴 Rojo oscuro
-          }).then(() => {
-              console.log("Redirigiendo a dashboard/config/importarplan");
-              this.router.navigate(['/dashboard', 'config', 'importarplan']); // ✅ Mejor forma en Angular
-          });
-      } else {
-          Swal.fire({
-              icon: "warning",
-              title: "Advertencia",
-              text: "No existen requerimientos importados en el plan seleccionado. Contáctese con el administrador.",
-              confirmButtonText: "Aceptar",
-              confirmButtonColor: "#ffc107" // 🟡 Amarillo (warning)
-          }).then(() => {
-              console.log("Redirigiendo a dashboard/home");
-              this.router.navigate(['/dashboard', 'home']); // ✅ Mejor forma en Angular
-          });
-      }
+    // Formatea la fecha actual al formato que espera el input de tipo 'date' (YYYY-MM-DD)
+    const fechaActual = new Date();
+    const anio = fechaActual.getFullYear();
+    const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0');
+    const dia = fechaActual.getDate().toString().padStart(2, '0');
+    const fechaFormateada = `${anio}-${mes}-${dia}`; 
+
+    this.informeForm = this.fb.group({
+      idsolicitud: [0, Validators.required],
+      fechainforme: [fechaFormateada, Validators.required],
+      razonsocial: ['', Validators.required],
+      representantelegal: ['', Validators.required],
+      cedula: ['', Validators.required],
+      fechaentrega: [fechaFormateada, Validators.required],
+      // items: [''],
+      copianit: [true],
+      certificadonit: [true],
+      seprec: [true],
+      copiaci: [true],
+      gestora: [true],
+      sigep: [true],
+      formulario2b: [true],
+      rupe: [true],
+      ofertatecnica: [true],
+      cumpledocumentos: [true],
+      cumpleofertaadj: [true],
+    });
+
+    // Guardamos los valores iniciales del formulario
+    this.initialFormValues = this.informeForm.value;
+
+    // Escuchamos los cambios en el checkbox ofertatecnica
+    this.informeForm.get('ofertatecnica')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpleofertaadj: value });
+    });
+
+
+    this.informeForm.get('copianit')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpledocumentos: value });
+    });
+    this.informeForm.get('certificadonit')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpledocumentos: value });
+    });
+    this.informeForm.get('seprec')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpledocumentos: value });
+    });
+    this.informeForm.get('copiaci')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpledocumentos: value });
+    });
+    this.informeForm.get('gestora')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpledocumentos: value });
+    });
+    this.informeForm.get('sigep')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpledocumentos: value });
+    });
+    this.informeForm.get('formulario2b')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpledocumentos: value });
+    });
+    this.informeForm.get('rupe')?.valueChanges.subscribe(value => {
+      this.informeForm.patchValue({ cumpledocumentos: value });
+    });
+
   }
 
   cargaDatos() {
-
-    // console.log(this.estadosService.planSeleccionado()?.id);
-    // console.log(this.estadosService.estadoFuncionario()?.cargo.idunidadorganizacional);
 
     this.apiService.getSolicitudProcesoByIdplanIdunodadorganizacional(
       this.idPlanActivo,
@@ -104,18 +137,12 @@ export class ProcesosListComponent implements OnInit{
       next: (resp) => {
         this.solicitudesTablaData = resp;
 
-
-        // console.log(this.solicitudesTablaData);
-
         resp.forEach(elemento => {
           const respuesta = this.solicitudesTablaData.find(r => r.id === elemento.id);
           if (respuesta) {
             respuesta.tipoprocesoTexto = elemento.tipoproceso.nombre; 
-            // console.log(respuesta)
           }
         });
-
-        // console.log(this.solicitudesTablaData);
 
         // Notificar a Angular que detecte cambios
         this.changeDetectorRef.detectChanges();  // Fuerza la actualización de la vista
@@ -125,12 +152,6 @@ export class ProcesosListComponent implements OnInit{
 
   btnNUevoRegistro(val: any) {
 
-
-    
-    // this.router.navigate(['/dashboard', 'procesos', 'nuevo']);
-    
-    // this.router.navigate(['/dashboard', 'config', 'importarplan']); 
-    
     // window.location.href = '/dashboard/procesos/nuevo'
     this.router.navigate(['/dashboard/procesos/nuevo'])
       .then(() => {
@@ -172,19 +193,28 @@ export class ProcesosListComponent implements OnInit{
   
       }
   
-    }
+  }
 
-    btnEditar(objeto) {
+  // solicitudSeleccionada: any;
+  btnEditar(objeto) {
 
+    this.idsolicitudseleccionada = objeto.id;
+
+    if (objeto) {
       $("#kt_modal_edit").modal("show");
 
-      // console.log("EDITAR", objeto);
-  
+      this.informeForm.patchValue({idsolicitud: objeto.id });
+
+      // this.solicitudSeleccionada = this.solicitudesTablaData.filter(objeto => objeto.id === objeto.id);
+
+      // console.log(this.solicitudSeleccionada);
+      
     }
+
+  }
 
   // public solicitudSelected!: SolicitudProceso;
   idsolicitudseleccionada = 0;
-
   btnImprimir(objeto) {
     // console.log("IMPRIMIR", objeto.id);
 
@@ -192,29 +222,103 @@ export class ProcesosListComponent implements OnInit{
 
     $("#kt_modal_imprimir_proceso").modal("show");
 
+  }
 
-    /*
-    this.apiService.getSolicitudById(objeto.id).subscribe({
-      next: (resp) => {
+  formatearFecha(date: Date | null): string | null {
+    if (!date) {
+      return null;
+    }
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
-        this.solicitudSelected = resp;
+  guardarInformeVrificacion() {
 
-        $("#kt_modal_imprimir_proceso").modal("show");
+      if (this.informeForm.valid)  {
+
+        const informeRawValue = this.informeForm.getRawValue();
+        const fechaEntregaValue = this.informeForm.get('fechaentrega')?.value;
+        const fechaEntregaFormateada = fechaEntregaValue ? this.formatearFecha(new Date(fechaEntregaValue)) : null;
+
+        const informe: InformeVerifiacion = {
+          ...informeRawValue,
+          fechainforme: new Date(informeRawValue.fechainforme), // Convertimos fechainforme a Date
+          fechaentrega: fechaEntregaFormateada, // Enviamos fechaentrega como string formateado
+          cedula: String( informeRawValue.cedula)
+        };
+
+        this.apiService.addInformeVerificacion(informe).subscribe({
+          next: (resp) => {
+
+            this.printInformeVerificacion(resp.id);
+
+            this.notificacionService.showSuccess('Éxito...', `El proceso fue correctamente registrado`);
+
+            $("#kt_modal_edit").modal("hide");
+
+            // this.informeForm.reset(this.initialFormValues);
+
+          }
+        });
 
       }
-    });
-*/
+      else {
+       Object.values(this.informeForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsTouched();
+        }
+      });
+      }
+  }
 
+  isGenerating = false;
+  error: string | null = null;
+  printInformeVerificacion(id: number | undefined) {
 
+    this.isGenerating = true;
+    this.error = null;
+    if (id) {
       
-/*
-
-      document.body.focus(); // Mueve el foco fuera del modal para evitar errores al cerrar el  modal
-      $("#kt_modal_seleccion_requerimientos").modal("hide");
-
-*/
-
+      this. apiService.generaInformeVerificacion(id).subscribe({
+        next: (blob: Blob) => {
+          this.descargarDocumento(blob);
+          this.isGenerating = false;
+        },
+        error: (err) => {
+          console.error('Error al generar el documento', err);
+          this.error = 'Ocurrió un error al generar el documento. Por favor, intenta nuevamente.';
+          this.isGenerating = false;
+        }
+      });
 
     }
 
+  }
+
+  private descargarDocumento(blob: Blob): void {
+    // Crear una URL para el blob
+    const url = window.URL.createObjectURL(blob);
+    
+    // Crear un elemento <a> invisible para descargar el archivo
+    const a = document.createElement('a');
+    a.href = url;
+    
+    // Nombre del archivo para la descarga
+    // const nombreArchivo = `si.docx`;
+    // const nombreArchivo = `${this.documentoData.nombre.replace(/\s/g, '_')}_${new Date().toISOString().split('T')[0]}.docx`;
+    const nombreArchivo = `${this.idsolicitudseleccionada.toString()}.Informe_Verif__${new Date().toISOString().split('T')[0]}.docx`;
+    a.download = nombreArchivo;
+    
+    // Agregar al DOM, hacer clic y luego eliminar
+    document.body.appendChild(a);
+    a.click();
+    
+    // Limpiar
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  }
+
 }
+

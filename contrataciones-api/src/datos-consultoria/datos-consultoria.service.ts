@@ -89,7 +89,7 @@ export class DatosConsultoriaService {
     } catch (error) {
       throw new InternalServerErrorException('No se pudo actualizar el registro:' + error);
     }
-    }
+  }
   
   async remove(id: number) : Promise<void> {
     try {

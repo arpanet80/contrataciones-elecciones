@@ -20,6 +20,17 @@ export class GeneraWordController {
   }
 
   ///////////////////////////////////////////
+  @Post('informe-verificacion')
+  async descargarInformeVerif(@Body() body: any, @Res() res: Response) {
+    const id = Number(body.id); 
+
+    const docBuffer = await this.generaWordService.generaInformeVerificacionDocumentos(id);
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Disposition', 'attachment; filename=resultado.docx');
+    res.send(docBuffer);
+  }
+
   @Post('proceso-adquisicion')
   async descargarProceso(@Body() body: any, @Res() res: Response) {
     const idSol = Number(body.idSol); 

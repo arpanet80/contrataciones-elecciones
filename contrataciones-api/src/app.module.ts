@@ -23,6 +23,7 @@ import { DocumentoReferenciaModule } from './documento-referencia/documento-refe
 import { NivelSalarialModule } from './nivel-salarial/nivel-salarial.module';
 import { TipoPlanModule } from './tipo-plan/tipo-plan.module';
 import { GeneraWordModule } from './genera-word/genera-word.module';
+import { InformeverificacionModule } from './informeverificacion/informeverificacion.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { GeneraWordModule } from './genera-word/genera-word.module';
     NivelSalarialModule,
     TipoPlanModule,
     GeneraWordModule,
+    InformeverificacionModule,
   ],
   controllers: [],
   providers: [],

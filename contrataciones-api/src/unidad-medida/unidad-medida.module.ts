@@ -12,5 +12,6 @@ import { UnidadMedida } from './entities/unidad-medida.entity';
   ],
   controllers: [UnidadMedidaController],
   providers: [UnidadMedidaService],
+  exports: [UnidadMedidaService], //
 })
 export class UnidadMedidaModule {}

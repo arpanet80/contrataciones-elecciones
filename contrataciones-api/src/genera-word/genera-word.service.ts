@@ -12,6 +12,11 @@ import { FormaAdjudicacionService } from 'src/forma-adjudicacion/forma-adjudicac
 import { MetodoSeleccionAdjudicService } from 'src/metodo-seleccion-adjudic/metodo-seleccion-adjudic.service';
 import { ProveedorService } from 'src/proveedor/proveedor.service';
 import { DatosConsultoriaService } from 'src/datos-consultoria/datos-consultoria.service';
+import { NivelSalarialService } from 'src/nivel-salarial/nivel-salarial.service';
+import { UnidadMedidaService } from 'src/unidad-medida/unidad-medida.service';
+import { UnidadMedida } from 'src/unidad-medida/entities/unidad-medida.entity';
+import { DatosInformeVerificacion, Item, Recomendacion } from './entities/datos-informe-verificacion';
+import { InformeverificacionService } from 'src/informeverificacion/informeverificacion.service';
 
 @Injectable()
 export class GeneraWordService {
@@ -23,8 +28,182 @@ export class GeneraWordService {
     private readonly formAdjService: FormaAdjudicacionService,
     private readonly metodosSelService: MetodoSeleccionAdjudicService,
     private readonly proveedorService: ProveedorService,
-    private readonly consultoriaService: DatosConsultoriaService
+    private readonly consultoriaService: DatosConsultoriaService,
+    private readonly nivelSalarialService: NivelSalarialService,
+    private readonly unidadMedidaService: UnidadMedidaService,
+    private readonly informeVerifService: InformeverificacionService
   ) {}
+  
+  async generaInformeVerificacionDocumentos(id: number): Promise<any> {     //Buffer
+   
+    // Verificar que los datos necesarios estén presentes
+    if (!id || id <= 0) {
+      throw new BadRequestException('Faltan datos requeridos para generar el documento');
+    }
+
+    ////// Armamos el objeto para pasarle al word //////////
+    const infoverif = await this.informeVerifService.findOne(id);
+    if (!infoverif) {
+        throw new BadRequestException('Hubo un error al recuperar la informacion del informe');
+    }
+
+    const sol = await this.solprocesoService.findOne(infoverif.idsolicitud);
+    const reqSolProceso = await this.reqSolProcesoService.findByIdSolProceso(infoverif.idsolicitud);
+    const funcio = await this.funcionarioService.findOne(sol.idusuariosolicitante);
+    if (!sol || !reqSolProceso || !funcio) {
+      throw new BadRequestException('Hubo un error en la solicitud, reuqerimientos o funcionario');
+    }
+
+    const reqs: Item[] = reqSolProceso.map(requerimientoProceso => ({
+      detalle: requerimientoProceso.requerimiento,
+    }));
+
+    const fechaliteral = this.formatearFecha(infoverif.fechainforme);
+    const anio = this.obtenerAnio(new Date())
+
+    let ofertatecnica= '';
+    let ofertatecnicaextra= '';
+    let recomendaciones: Recomendacion[] = [];
+
+    //// todo correcto 
+    if (infoverif.ofertatecnica === true && infoverif.cumpleofertaadj === true &&  infoverif.cumpledocumentos === true ) {
+      ofertatecnica = `El proponente ${infoverif.razonsocial} SI CUMPLE con las especificaciones técnicas requeridas por la unidad solicitante en el presente proceso de contratación.`;
+      
+      recomendaciones.push({detalle: 'Proseguir con los pasos establecidos en el Reglamento de Contratación de Bienes y Servicios del Órgano Electoral Plurinacional para el presente proceso de contratación.'});
+
+    }
+
+      /// No entrego oferta y 
+    if (infoverif.ofertatecnica === false && infoverif.cumpleofertaadj === false ) {   
+      ofertatecnica = `El proponente ${infoverif.razonsocial} NO PRESENTÓ su propuesta,técnica por lo que no se pudo evidenciar en qué consistía la oferta económica que realizó en el sistema SICOES, por lo que NO CUMPLE con las especificaciones técnicas del proceso de contratación.`;
+      ofertatecnicaextra = '\nPese a que la unidad de Contrataciones realizó el envío de las especificaciones técnicas del presente proceso de contratación, el proponente no tuvo en cuenta este documento para la presentación de su propuesta.';
+
+      recomendaciones.push({detalle: 'Se recomienda adjudicar a la empresa que ocupa el siguiente puesto en el cuadro de propuestas del resumen de propuestas presentadas a SICOES conforme se establece en la normativa legal vigente.  '});
+      recomendaciones.push({detalle: 'Proseguir con los pasos establecidos en el Reglamento de Contratación de Bienes y Servicios del Órgano Electoral Plurinacional para el presente proceso de contratación.'});
+    }
+
+    // Si la oferta NO CUMPLE
+    if ( infoverif.ofertatecnica === true && infoverif.cumpleofertaadj === false ) {
+      ofertatecnica = 'Justificar porque no cumplio la oferta.......................';
+
+      recomendaciones.push({detalle: 'Se recomienda adjudicar a la empresa que ocupa el siguiente puesto en el cuadro de propuestas del resumen de propuestas presentadas a SICOES conforme se establece en la normativa legal vigente.  '});
+      recomendaciones.push({detalle: 'Proseguir con los pasos establecidos en el Reglamento de Contratación de Bienes y Servicios del Órgano Electoral Plurinacional para el presente proceso de contratación.'});
+    }
+
+
+    // si hay oferta y CUMPLE pero no cumple docs
+    if (infoverif.ofertatecnica === true && infoverif.cumpleofertaadj === true &&  infoverif.cumpledocumentos === false ) {
+      ofertatecnica = `El proponente ${infoverif.razonsocial} SI CUMPLE con las especificaciones técnicas requeridas por la unidad solicitante en el presente proceso de contratación.`;
+      
+      recomendaciones.push({detalle: 'Se recomienda adjudicar a la empresa que ocupa el siguiente puesto en el cuadro de propuestas del resumen de propuestas presentadas a SICOES conforme se establece en la normativa legal vigente.  '});
+      recomendaciones.push({detalle: 'Proseguir con los pasos establecidos en el Reglamento de Contratación de Bienes y Servicios del Órgano Electoral Plurinacional para el presente proceso de contratación.'});
+    }
+
+    let data: DatosInformeVerificacion
+    
+    //// es proceso de Personal
+    if (sol.idtipoproceso !== 3) {
+      
+      data = {
+        cite:  `TIC-PDSE-EG-Nº ${infoverif.idsolicitud}-V/${anio}`,
+        solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
+        cargosolicitante: funcio.cargo.toUpperCase(),
+        fechaliteral: fechaliteral,
+        objeto: sol.objetocontratacion.toUpperCase(),
+        razonsocial: infoverif.razonsocial.toUpperCase(),
+        representantelegal: this.toTitleCase(infoverif.representantelegal),
+        fechaentrega: this.formatearFechaSalida(infoverif.fechaentrega.toString()),
+        items: reqs,
+        cedula: infoverif.cedula,
+        copianitCumple: infoverif.copianit === true ? 'X' : '',
+        copianitNoCumple: infoverif.copianit === false ? 'X' : '',
+        certificadonitCumple: infoverif.certificadonit === true ? 'X' : '',
+        certificadonitNoCumple: infoverif.certificadonit === false ? 'X' : '',
+        seprecCumple: infoverif.seprec === true ? 'X' : '',
+        seprecNoCumple: infoverif.seprec === false ? 'X' : '',
+        copiaciCumple: infoverif.copiaci === true ? 'X' : '',
+        copiaciNoCumple: infoverif.copiaci === false ? 'X' : '',
+        gestoraCumple:  infoverif.gestora === true ? 'X' : '',
+        gestoraNoCumple:  infoverif.gestora === false ? 'X' : '',
+        sigepCumple: infoverif.sigep === true ? 'X' : '',
+        sigepNoCumple: infoverif.sigep === false ? 'X' : '',
+        formulario2bCumple: infoverif.formulario2b === true ? 'X' : '',
+        formulario2bNoCumple: infoverif.formulario2b === false ? 'X' : '',
+        rupeCumple: infoverif.formulario2b === true ? 'X' : '',
+        rupeNoCumple: infoverif.formulario2b === false ? 'X' : '',
+        detallecumplimientoofertatecnica: ofertatecnica,
+        detallecumplimientoofertatecnicaEXTRA: ofertatecnicaextra,
+
+        cumpledocumentos: infoverif.cumpledocumentos === true ? `SI CUMPLE` : 'NO CUMPLE',
+        cumpleoferta: infoverif.cumpleofertaadj === true ? `SI CUMPLE` : 'NO CUMPLE',
+        cumpledocumentosX: infoverif.cumpledocumentos === true ? 'X' : '',
+        noCumpledocumentosX: infoverif.cumpledocumentos === false ? 'X' : '',
+        cumpleofertaX: infoverif.cumpleofertaadj === true ?  'X' : '',
+        noCumpleofertaX: infoverif.cumpleofertaadj === false ?  'X' : '',
+        
+        recomendaciones: recomendaciones
+      };
+      
+      try {
+        const templatePath = path.resolve(
+          process.cwd(),
+          'src',
+          'genera-word',
+          'templates',
+          'InformeVerificacion.docx',
+        );
+
+        // Verificar que la plantilla existe
+        if (!fs.existsSync(templatePath)) {
+          throw new BadRequestException(`No se encontró la plantilla en: ${templatePath}`);
+        }
+
+        // Leer el archivo plantilla
+        const content = fs.readFileSync(templatePath, 'binary');
+
+        // Cargar en PizZip
+        const zip = new PizZip(content);
+
+        // Cargar en Docxtemplater
+        const doc = new Docxtemplater(zip, {
+          delimiters: { start: '[[', end: ']]' },
+          paragraphLoop: true,
+          linebreaks: true
+        });
+
+        try {
+          // Usar directamente el método render con los datos
+          doc.render(data);
+        } catch (error) {
+          console.error('Error al renderizar el documento:', error);
+          
+          // Proporcionar mensaje de error más detallado si es posible
+          if (error.properties && error.properties.errors) {
+            const errorMessages = error.properties.errors
+              .map(e => `Variable "${e.properties.name}": ${e.message}`)
+              .join(', ');
+            throw new BadRequestException(`Error al renderizar la plantilla: ${errorMessages}`);
+          }
+          
+          throw new BadRequestException('Error al generar el documento');
+        }
+
+        // Obtener el documento generado como buffer
+        const buf = doc.getZip().generate({ type: 'nodebuffer' });
+        return buf;
+      } catch (error) {
+        if (error instanceof BadRequestException) {
+          throw error;
+        }
+        console.error('Error en el servicio:', error);
+        throw new BadRequestException('Error al generar el documento');
+      }
+
+
+    }
+
+  }
+
   
   async generaProcesoAdquisicion(idSol: number): Promise<Buffer> {
    
@@ -58,8 +237,10 @@ export class GeneraWordService {
     if (sol.idtipoproceso === 3) {
       
       const consultor = await this.consultoriaService.findByIdSolProceso(idSol);
-      if (!consultor ) {
-        throw new BadRequestException('Hubo un error al recuperar la informacion de consultoria');
+      const nivelsalarial = await this.nivelSalarialService.findOne(consultor[0].nivelsalarial);
+
+      if (!consultor || !nivelsalarial) {
+        throw new BadRequestException('Hubo un error al recuperar la informacion de consultoria o nivel salarial');
       }
 
       data = {
@@ -81,7 +262,7 @@ export class GeneraWordService {
         codigopac: sol.codigopac ? sol.codigopac.toString()  : '',
 
         //////////// personal ///////////////
-        nivelsalarial: consultor[0].nivelsalarial.toString(),
+        nivelsalarial: nivelsalarial.nivelsalarial,
         honorariomensual: consultor[0].honorariomensual.toString(),
         numerocasos: consultor[0].numerocasos.toString(),
         observaciones: consultor[0].observaciones
@@ -91,8 +272,9 @@ export class GeneraWordService {
     else {    //// Si no es personal
 
       const proveedor = await this.proveedorService.findOne(idSol);
-      if (!proveedor ) {
-        throw new BadRequestException('Hubo un error al recuperar la informacion del proveedor');
+      const unidadesmedida = await this.unidadMedidaService.findAll();
+      if (!proveedor || !unidadesmedida) {
+        throw new BadRequestException('Hubo un error al recuperar la informacion del proveedor o unidad de medida');
       }
 
       let arrayItems: Requerimiento[] = [];
@@ -103,7 +285,7 @@ export class GeneraWordService {
         arrayItems.push({
           numero: indice+1,
           requerimiento: req.requerimiento,
-          unidad: req.idunidadmedida.toString(),
+          unidad: this.getUnidadMedidaPorId(req.idunidadmedida, unidadesmedida),
           cantidad: req.cantidad,
           precioUnitario: req.preciounitario,
           precioTotal: req.preciototal
@@ -139,36 +321,11 @@ export class GeneraWordService {
 
         items: arrayItems,
 
-        /*
-        items: [
-          {
-            numero: 1,
-            requerimiento: 'Extensor HDMI',
-            unidad: 'Pza',
-            cantidad: 1,
-            precioUnitario: 945,
-            precioTotal: 945,
-          },
-          {
-            numero: 2,
-            requerimiento: 'Unidad Flash USB',
-            unidad: 'Pza',
-            cantidad: 5,
-            precioUnitario: 130,
-            precioTotal: 650,
-          },
-        ],
-        */
         totalLietral: this.numeroALetras(totalProceso),
         totalTotalGeneral: totalProceso
 
       };
     }
-
-
-
-
-
     try {
 
       let templatePath: any;
@@ -330,6 +487,18 @@ export class GeneraWordService {
 
   ////////////// UTILIDADES ////////////////////////
 
+  // procesarRequerimientos(reqSolProceso: RequerimientoProceso[]): Item[] {
+  //   const reqs: Item[] = reqSolProceso.map(requerimientoProceso => ({
+  //     detalle: requerimientoProceso.requerimiento,
+  //   }));
+  //   return reqs;
+  // }
+  
+  getUnidadMedidaPorId(id: number, unidades: UnidadMedida[]): string | null {
+  const unidad = unidades.find(u => u.id === id);
+  return unidad ? unidad.descripcion : null;
+}
+
   formatearDosDecimales(valor: any): string {
     const numero = Number(valor);
 
@@ -359,6 +528,22 @@ export class GeneraWordService {
     const anio = fecha.getFullYear();
 
     return `${dia} de ${mes} de ${anio}`;
+  }
+
+  formatearFechaSalida(fechaPostgres: string): string | null {
+    if (!fechaPostgres) {
+      return null;
+    }
+    // Asumimos que la fecha de Postgres viene en formato YYYY-MM-DD
+    const partes = fechaPostgres.split('-');
+    if (partes.length !== 3) {
+      return null; // La cadena no tiene el formato esperado
+    }
+    const anio = partes[0];
+    const mes = partes[1];
+    const dia = partes[2];
+
+    return `${dia}-${mes}-${anio}`;
   }
 
   obtenerAnio(fecha: Date | string): number {

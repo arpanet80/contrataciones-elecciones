@@ -9,14 +9,6 @@
         >
         Proceso de contratacion
     </button> 
-
-    &nbsp; &nbsp;
-    <button (click)="printSolContrat()"  
-        class="btn btn-success btn-sm"  
-        [disabled]="isGenerating"
-        >
-        Formulario Inexistenia
-    </button> 
     <br>
     <div *ngIf="error" class="alert alert-danger mt-3">
         {{ error }}

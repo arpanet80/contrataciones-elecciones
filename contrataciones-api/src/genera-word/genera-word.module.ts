@@ -9,11 +9,14 @@ import { FormaAdjudicacionModule } from 'src/forma-adjudicacion/forma-adjudicaci
 import { MetodoSeleccionAdjudicModule } from 'src/metodo-seleccion-adjudic/metodo-seleccion-adjudic.module';
 import { ProveedorModule } from 'src/proveedor/proveedor.module';
 import { DatosConsultoriaModule } from 'src/datos-consultoria/datos-consultoria.module';
+import { NivelSalarialModule } from 'src/nivel-salarial/nivel-salarial.module';
+import { UnidadMedidaModule } from 'src/unidad-medida/unidad-medida.module';
+import { InformeverificacionModule } from 'src/informeverificacion/informeverificacion.module';
 
 @Module({
   imports: [
     SolprocesoModule, RequerimientoProcesoModule, ClasificadorModule, FuncionariosModule, FormaAdjudicacionModule, MetodoSeleccionAdjudicModule,
-    ProveedorModule, DatosConsultoriaModule
+    ProveedorModule, DatosConsultoriaModule, NivelSalarialModule, UnidadMedidaModule, InformeverificacionModule
   ],
   controllers: [GeneraWordController],
   providers: [GeneraWordService],

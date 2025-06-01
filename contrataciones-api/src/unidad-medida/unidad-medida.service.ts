@@ -16,7 +16,7 @@ export class UnidadMedidaService {
   async findAll() : Promise<UnidadMedida[]> {
       const query =  await this.unidaMedidaRepository.find({
         where: { activo: true},
-        order: { id: "ASC"     }
+        order: { descripcion: "ASC"     }
       });
       
       return query

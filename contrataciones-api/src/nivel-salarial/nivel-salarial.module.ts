@@ -12,5 +12,6 @@ import { NivelSalarial } from './entities/nivel-salarial.entity';
       ],
   controllers: [NivelSalarialController],
   providers: [NivelSalarialService],
+  exports: [NivelSalarialService], //
 })
 export class NivelSalarialModule {}
