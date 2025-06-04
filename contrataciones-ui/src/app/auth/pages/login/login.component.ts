@@ -24,8 +24,8 @@ export class LoginComponent  {
   errorMessage: string = "";
 
   public myForm: FormGroup = this.fb.group({
-    usuario:    ['dante.ibanez', [ Validators.required, , Validators.minLength(5) ]],
-    contrasena: ['Passw0rd', [ Validators.required, , Validators.minLength(3)]],
+    usuario:    ['', [ Validators.required, , Validators.minLength(5) ]],
+    contrasena: ['', [ Validators.required, , Validators.minLength(3)]],
   });
 
   login(): void {

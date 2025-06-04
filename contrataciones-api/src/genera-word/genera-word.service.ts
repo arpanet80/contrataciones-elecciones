@@ -17,6 +17,9 @@ import { UnidadMedidaService } from 'src/unidad-medida/unidad-medida.service';
 import { UnidadMedida } from 'src/unidad-medida/entities/unidad-medida.entity';
 import { DatosInformeVerificacion, Item, Recomendacion } from './entities/datos-informe-verificacion';
 import { InformeverificacionService } from 'src/informeverificacion/informeverificacion.service';
+import { InformeRecepcionService } from 'src/informe-recepcion/informe-recepcion.service';
+import { InformeRecepcionResponsableAdminService } from 'src/informe-recepcion-responsable-admin/informe-recepcion-responsable-admin.service';
+import { DatosInforRecepcion, RequerimientoRecep } from './entities/datos-informe-recepcion';
 
 @Injectable()
 export class GeneraWordService {
@@ -31,9 +34,182 @@ export class GeneraWordService {
     private readonly consultoriaService: DatosConsultoriaService,
     private readonly nivelSalarialService: NivelSalarialService,
     private readonly unidadMedidaService: UnidadMedidaService,
-    private readonly informeVerifService: InformeverificacionService
+    private readonly informeVerifService: InformeverificacionService,
+    private readonly informeRecepService: InformeRecepcionService,
+    private readonly funcionarioAdminRecepcionService: InformeRecepcionResponsableAdminService
   ) {}
   
+  async generaInformeRecepcion(idSol: number): Promise<any> {     //Buffer
+   
+    // Verificar que los datos necesarios estén presentes
+    if (!idSol || idSol <= 0) {
+      throw new BadRequestException('Faltan datos requeridos para generar el documento');
+    }
+    
+    ////// Armamos el objeto para pasarle al word //////////
+    const inforRecep = await this.informeRecepService.findOneByIdSol(idSol);
+    if (!inforRecep) {
+        throw new BadRequestException('Hubo un error al recuperar la informacion del informe');
+    }
+
+    const sol = await this.solprocesoService.findOne(inforRecep.idsolicitud);
+    const reqSolProceso = await this.reqSolProcesoService.findByIdSolProceso(inforRecep.idsolicitud);
+    const funcio = await this.funcionarioService.findOne(sol.idusuariosolicitante);
+    const funcioRecepAdmin = await this.funcionarioAdminRecepcionService.findOne(inforRecep.idresponsablerecepcionadmin);
+    const unidadesmedida = await this.unidadMedidaService.findAll();
+
+    if (!sol || !reqSolProceso || !funcio || !funcioRecepAdmin || !unidadesmedida) {
+      throw new BadRequestException('Hubo un error en la solicitud, reuqerimientos o funcionario');
+    }
+
+    const reqs: Item[] = reqSolProceso.map(requerimientoProceso => ({
+      detalle: requerimientoProceso.requerimiento,
+    }));
+
+    const anio = this.obtenerAnio(new Date())
+
+    // Obtener la fecha (YYYY-MM-DD)
+    const year = inforRecep.fecharecepcion.getFullYear();
+    const month = (inforRecep.fecharecepcion.getMonth() + 1).toString().padStart(2, '0'); // +1 porque los meses van de 0 a 11
+    const day = inforRecep.fecharecepcion.getDate().toString().padStart(2, '0');
+    const fechaRecepcion = this.formatearFecha( `${year}-${month}-${day}` );
+
+    // Obtener la hora (HH:MM:SS)
+    const hours = inforRecep.fecharecepcion.getHours().toString().padStart(2, '0');
+    const minutes = inforRecep.fecharecepcion.getMinutes().toString().padStart(2, '0');
+    const hora = `${hours}:${minutes}`;
+    // const seconds = inforRecep.fecharecepcion.getSeconds().toString().padStart(2, '0');
+    // const hora = `${hours}:${minutes}:${seconds}`;
+
+    //// Arma los requerimientos ///////////
+    let arrayItems: RequerimientoRecep[] = [];
+    let indice = 0;
+    let totalProceso:number = 0;
+
+    reqSolProceso.forEach(req => {
+      arrayItems.push({
+        numero: indice+1,
+        requerimiento: req.requerimiento,
+        unidad: this.getUnidadMedidaPorId(req.idunidadmedida, unidadesmedida),
+        cantidad: req.cantidad,
+        precioUnitario: req.preciounitario,
+        precioTotal: req.preciototal
+      })
+      indice++;
+      totalProceso = totalProceso + Number(req.preciototal); 
+    });
+    
+    let data: DatosInforRecepcion
+    
+    //// es proceso de Personal
+    if (sol.idtipoproceso !== 3) {
+      
+      data = {
+
+        cite:  `TIC-PDSE-EG-Nº ${inforRecep.idsolicitud}-R/${anio}`,
+        solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
+        cargosolicitante: funcio.cargo.toUpperCase(),
+        responsablerecepcionadmin: funcioRecepAdmin.nombrecompleto,
+        cargoresponsablerecepcionadmin: funcioRecepAdmin.cargo.toUpperCase(),
+        objeto: sol.objetocontratacion.toUpperCase(),
+        fechainformeliteral: this.formatearFecha(inforRecep.fechainforme),
+        citememounidadsol: inforRecep.citememounidadsol,
+        citememoadmin: inforRecep.citememoadmin,
+        fechamemosliteral: this.formatearFecha(inforRecep.fechamemo),
+        fecharecepcionliteral: fechaRecepcion,
+        horarecepcionliteral: hora,
+        items: arrayItems,
+        totalLietral: this.numeroALetras(totalProceso),
+        totalTotalGeneral: totalProceso
+
+      };
+      
+      try {
+
+      let templatePath: any;
+      console.log(">>", sol.idtipoproceso);
+
+      switch (sol.idtipoproceso) {
+        case 1:
+          templatePath = path.resolve(
+            process.cwd(),
+            'src',
+            'genera-word',
+            'templates',
+            'RecepcionAdquisicion.docx',
+          );  
+          break;
+      
+        case 2:
+          templatePath = path.resolve(
+            process.cwd(),
+            'src',
+            'genera-word',
+            'templates',
+            'RecepcionServicio.docx',
+          );  
+          break;
+      }
+
+        // const templatePath = path.resolve(
+        //   process.cwd(),
+        //   'src',
+        //   'genera-word',
+        //   'templates',
+        //   'RecepcionAdquisicion.docx',
+        // );
+
+        // Verificar que la plantilla existe
+        if (!fs.existsSync(templatePath)) {
+          throw new BadRequestException(`No se encontró la plantilla en: ${templatePath}`);
+        }
+
+        // Leer el archivo plantilla
+        const content = fs.readFileSync(templatePath, 'binary');
+
+        // Cargar en PizZip
+        const zip = new PizZip(content);
+
+        // Cargar en Docxtemplater
+        const doc = new Docxtemplater(zip, {
+          delimiters: { start: '[[', end: ']]' },
+          paragraphLoop: true,
+          linebreaks: true
+        });
+
+        try {
+          // Usar directamente el método render con los datos
+          doc.render(data);
+        } catch (error) {
+          console.error('Error al renderizar el documento:', error);
+          
+          // Proporcionar mensaje de error más detallado si es posible
+          if (error.properties && error.properties.errors) {
+            const errorMessages = error.properties.errors
+              .map(e => `Variable "${e.properties.name}": ${e.message}`)
+              .join(', ');
+            throw new BadRequestException(`Error al renderizar la plantilla: ${errorMessages}`);
+          }
+          
+          throw new BadRequestException('Error al generar el documento');
+        }
+
+        // Obtener el documento generado como buffer
+        const buf = doc.getZip().generate({ type: 'nodebuffer' });
+        return buf;
+      } catch (error) {
+        if (error instanceof BadRequestException) {
+          throw error;
+        }
+        console.error('Error en el servicio:', error);
+        throw new BadRequestException('Error al generar el documento');
+      }
+
+
+    }
+
+  }
+
   async generaInformeVerificacionDocumentos(id: number): Promise<any> {     //Buffer
    
     // Verificar que los datos necesarios estén presentes
@@ -105,7 +281,7 @@ export class GeneraWordService {
     if (sol.idtipoproceso !== 3) {
       
       data = {
-        cite:  `TIC-PDSE-EG-Nº ${infoverif.idsolicitud}-V/${anio}`,
+        cite:  `TIC-PDSE-EG-Nº ${infoverif.idsolicitud}-V-${infoverif.id}/${anio}`,
         solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
         cargosolicitante: funcio.cargo.toUpperCase(),
         fechaliteral: fechaliteral,
@@ -204,7 +380,6 @@ export class GeneraWordService {
 
   }
 
-  
   async generaProcesoAdquisicion(idSol: number): Promise<Buffer> {
    
     // Verificar que los datos necesarios estén presentes

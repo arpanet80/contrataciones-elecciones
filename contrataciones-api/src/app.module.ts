@@ -24,6 +24,8 @@ import { NivelSalarialModule } from './nivel-salarial/nivel-salarial.module';
 import { TipoPlanModule } from './tipo-plan/tipo-plan.module';
 import { GeneraWordModule } from './genera-word/genera-word.module';
 import { InformeverificacionModule } from './informeverificacion/informeverificacion.module';
+import { InformeRecepcionModule } from './informe-recepcion/informe-recepcion.module';
+import { InformeRecepcionResponsableAdminModule } from './informe-recepcion-responsable-admin/informe-recepcion-responsable-admin.module';
 
 @Module({
   imports: [
@@ -52,6 +54,8 @@ import { InformeverificacionModule } from './informeverificacion/informeverifica
     TipoPlanModule,
     GeneraWordModule,
     InformeverificacionModule,
+    InformeRecepcionModule,
+    InformeRecepcionResponsableAdminModule,
   ],
   controllers: [],
   providers: [],

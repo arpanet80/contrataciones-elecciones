@@ -241,7 +241,7 @@ export class SolprocesoService {
         idunidadoperativa: idunidadorganizacional,
         activo: true
         },
-        order: { id: "ASC"     }
+        order: { id: "DESC"     }
     });
 
     if (!query) {

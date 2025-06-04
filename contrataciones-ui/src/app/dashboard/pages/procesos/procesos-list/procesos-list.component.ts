@@ -8,16 +8,20 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { TablaOpciones, TableColumnSchema } from '../../../../core/components/tabla-generica/tabla-column.model';
 import { ProcesoImprimirComponent } from '../proceso-imprimir/proceso-imprimir.component';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ControlMessagesComponent } from '../../../../core/services/validation-controls/control-messages.component';
 import { InformeVerifiacion } from '../../../models/informe-verificacion.model';
+import { NgFor, NgIf } from '@angular/common';
+import { InformeRecepcionResponsableAdmin } from '../../../models/informe-recepcion-responsable-admin';
+import { forkJoin } from 'rxjs';
+import { InformeRecepcion } from '../../../models/informe-recepcion.model';
 declare var $: any;          // para usar jquery
 
 
 @Component({
   selector: 'app-procesos-list',
   imports: [ TablaGenericaComponent, ProcesoImprimirComponent,  ReactiveFormsModule,
-    ControlMessagesComponent
+    ControlMessagesComponent, FormsModule, NgIf, NgFor
     // FormsModule,
    ],
   templateUrl: './procesos-list.component.html',
@@ -32,13 +36,16 @@ export class ProcesosListComponent implements OnInit{
   private changeDetectorRef = inject(ChangeDetectorRef);  // Inyectamos ChangeDetectorRef
 
   idPlanActivo = 3;     /// SOLO PARA ELECCIONES GENERALES
-  initialFormValues: any; // Guardaremos los valores iniciales
+      
+  seleccionRadio: string | null = null;
+  mostrarSeccionVerificacion = false;
+  mostrarSeccionRecepcion = false;
 
   solicitudesTablaData: SolicitudProceso[] = [];
   solicitudesTablaColumns: TableColumnSchema[] = SolicitudProcesoColumns;
   solicitudesTablaOpiones: TablaOpciones =  {
     btnNuevo:true,
-    btnEliminar: true,
+    // btnEliminar: true,
     btnCustom: {
       icono: '<i class="bi bi-pencil-fill"></i>',
       colorClass: 'btn-light-success',
@@ -46,31 +53,41 @@ export class ProcesosListComponent implements OnInit{
     },
     btnCustom1: {
       icono: '<i class="bi bi-printer-fill"></i>',
-      colorClass: 'btn-light-info',
+      colorClass: 'btn-light-warning',
       tooltip: 'Imprimir'
     },
   }
 
+  responsablesRecepcionAdmin: InformeRecepcionResponsableAdmin[] = [];
+
   informeForm!: FormGroup;
+  initialFormValues: any; // Guardaremos los valores iniciales
+
+  informeRecepcionForm!: FormGroup;
+  initialForminformeRecepcionValues: any; // Guardaremos los valores iniciales
   constructor(private fb: FormBuilder) { }
 
   getControl(nombre: string): FormControl {
       return this.informeForm.get(nombre) as FormControl;
-    } 
+  } 
+
+  getControlRecepcion(nombre: string): FormControl {
+      return this.informeRecepcionForm.get(nombre) as FormControl;
+  } 
     
   ngOnInit(): void {
 
     this.cargaDatos();
 
-    ////////////// FORMULARIO /////////////////////////////////
-
+    
     // Formatea la fecha actual al formato que espera el input de tipo 'date' (YYYY-MM-DD)
     const fechaActual = new Date();
     const anio = fechaActual.getFullYear();
     const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0');
     const dia = fechaActual.getDate().toString().padStart(2, '0');
     const fechaFormateada = `${anio}-${mes}-${dia}`; 
-
+    
+    ////////////// FORMULARIO VERIFICACION /////////////////////////////////
     this.informeForm = this.fb.group({
       idsolicitud: [0, Validators.required],
       fechainforme: [fechaFormateada, Validators.required],
@@ -94,6 +111,19 @@ export class ProcesosListComponent implements OnInit{
 
     // Guardamos los valores iniciales del formulario
     this.initialFormValues = this.informeForm.value;
+
+    ////////////// FORMULARIO VERIFICACION /////////////////////////////////
+    this.informeRecepcionForm = this.fb.group({
+      idsolicitud: [0, Validators.required],
+      citememounidadsol: ['JSFA-TED-PT/Nº ', Validators.required],
+      citememoadmin: ['JSFA-TED-PT/Nº ', Validators.required],
+      idresponsablerecepcionadmin: ['', Validators.required],
+      fechamemo: ['', Validators.required],
+      fecharecepcion: ['', Validators.required],
+    });
+
+    // Guardamos los valores iniciales del formulario
+    this.initialForminformeRecepcionValues = this.informeRecepcionForm.value;
 
     // Escuchamos los cambios en el checkbox ofertatecnica
     this.informeForm.get('ofertatecnica')?.valueChanges.subscribe(value => {
@@ -130,6 +160,38 @@ export class ProcesosListComponent implements OnInit{
 
   cargaDatos() {
 
+    forkJoin([
+        this.apiService.getSolicitudProcesoByIdplanIdunodadorganizacional(
+          this.idPlanActivo,
+          Number(this.estadosService.estadoFuncionario()?.cargo.idunidadorganizacional)
+        ),
+        this.apiService.getAllResponsableRecepcion()
+    ]).subscribe({
+      next: ([responseSolicitud, responseResponsablesAdmin]) => {
+        
+        this.solicitudesTablaData = responseSolicitud;
+        responseSolicitud.forEach(elemento => {
+          const respuesta = this.solicitudesTablaData.find(r => r.id === elemento.id);
+          if (respuesta) {
+            respuesta.tipoprocesoTexto = elemento.tipoproceso.nombre; 
+          }
+        });
+
+        this.responsablesRecepcionAdmin = responseResponsablesAdmin;
+
+        // Notificar a Angular que detecte cambios
+        this.changeDetectorRef.detectChanges();  // Fuerza la actualización de la vista
+
+
+      },
+      error: (err) => {
+        console.error('Error al obtener datos:', err);
+        this.notificacionService.showError('Error al obtener datos :', 'Error!!!')
+      }
+    });
+
+
+    /*
     this.apiService.getSolicitudProcesoByIdplanIdunodadorganizacional(
       this.idPlanActivo,
       Number(this.estadosService.estadoFuncionario()?.cargo.idunidadorganizacional)
@@ -148,6 +210,7 @@ export class ProcesosListComponent implements OnInit{
         this.changeDetectorRef.detectChanges();  // Fuerza la actualización de la vista
       },
     });
+    */
   }
 
   btnNUevoRegistro(val: any) {
@@ -205,10 +268,6 @@ export class ProcesosListComponent implements OnInit{
 
       this.informeForm.patchValue({idsolicitud: objeto.id });
 
-      // this.solicitudSeleccionada = this.solicitudesTablaData.filter(objeto => objeto.id === objeto.id);
-
-      // console.log(this.solicitudSeleccionada);
-      
     }
 
   }
@@ -258,7 +317,9 @@ export class ProcesosListComponent implements OnInit{
 
             $("#kt_modal_edit").modal("hide");
 
-            // this.informeForm.reset(this.initialFormValues);
+            this.informeForm.reset(this.initialFormValues);
+
+            this.inicializaSecciones()
 
           }
         });
@@ -273,6 +334,17 @@ export class ProcesosListComponent implements OnInit{
       }
   }
 
+  inicializaSecciones() {
+    this.mostrarSeccionVerificacion = false;
+    this.mostrarSeccionRecepcion = false;
+
+    this.seleccionRadio = null;
+  }
+
+  cancelarForm() {
+    $("#kt_modal_edit").modal("hide");
+  }
+
   isGenerating = false;
   error: string | null = null;
   printInformeVerificacion(id: number | undefined) {
@@ -282,6 +354,28 @@ export class ProcesosListComponent implements OnInit{
     if (id) {
       
       this. apiService.generaInformeVerificacion(id).subscribe({
+        next: (blob: Blob) => {
+          this.descargarDocumento(blob);
+          this.isGenerating = false;
+        },
+        error: (err) => {
+          console.error('Error al generar el documento', err);
+          this.error = 'Ocurrió un error al generar el documento. Por favor, intenta nuevamente.';
+          this.isGenerating = false;
+        }
+      });
+
+    }
+
+  }
+
+  printInformeRecepcion(id: number | undefined) {
+
+    this.isGenerating = true;
+    this.error = null;
+    if (id) {
+      
+      this. apiService.generaInformeRecepcion(id).subscribe({
         next: (blob: Blob) => {
           this.descargarDocumento(blob);
           this.isGenerating = false;
@@ -320,5 +414,56 @@ export class ProcesosListComponent implements OnInit{
     document.body.removeChild(a);
   }
 
+  onChangeSeleccion() {
+
+    switch (this.seleccionRadio) {
+      case 'verificacion':
+        this.mostrarSeccionVerificacion = true;
+        this.mostrarSeccionRecepcion = false;
+        break;
+    
+      case 'recepcion':
+      this.mostrarSeccionRecepcion = true;  
+      this.mostrarSeccionVerificacion = false;
+        break;
+    }
+  }
+
+  guardarInformeRecepcion() {
+
+      if (this.informeRecepcionForm.valid)  {
+
+        const informeRawValue = this.informeRecepcionForm.getRawValue();
+
+        const informe: InformeRecepcion = {
+          ...informeRawValue,
+          idsolicitud: this.idsolicitudseleccionada,
+        };
+        
+        this.apiService.addInformeRecepcion(informe).subscribe({
+          next: (resp) => {
+
+            this.printInformeRecepcion(resp.id);
+
+            this.notificacionService.showSuccess('Éxito...', `El proceso fue correctamente registrado`);
+
+            $("#kt_modal_edit").modal("hide");
+
+            this.informeForm.reset(this.initialFormValues);
+
+            this.inicializaSecciones()
+
+          }
+        });
+
+      }
+      else {
+       Object.values(this.informeForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsTouched();
+        }
+      });
+      }
+  }
 }
 

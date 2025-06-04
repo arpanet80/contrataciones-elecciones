@@ -17,6 +17,11 @@ export class InformeverificacionController {
     return this.informeverificacionService.findAll();
   }
 
+  @Get('proceso/:idSol')
+  findAllByProceso(@Param('idSol') idSol: string) {
+    return this.informeverificacionService.findAllByProceso(+idSol);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.informeverificacionService.findOne(+id);

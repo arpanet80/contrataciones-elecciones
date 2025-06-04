@@ -9,10 +9,10 @@
 
             <!-- ------------------- TABLA ----------------------------- -->
 
+            <!-- (btnEditar)="btnEditar($event)" -->
+            <!-- (btnEliminar)="btnEliminar($event)" -->
             <app-tabla-generica 
                 (btnNuevo)="btnNUevoRegistro($event)"
-                (btnEditar)="btnEditar($event)"
-                (btnEliminar)="btnEliminar($event)"
                 (btnCustom)="btnEditar($event)"
                 (btnCustom1)="btnImprimir($event)"
                 
@@ -43,283 +43,456 @@
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-900px">
   
-      <!--begin::Modal content-->
-      <div class="modal-content">
-  
-        <!-- ---- Titulo ------- -->
-        <!--begin::Modal header-->
-        <div class="modal-header" id="kt_modal_add_user_header">
-  
-          <!--begin::Modal title-->
-          <h2 class="fw-bold">Datos para Informes </h2>
-          <!--end::Modal title-->
-  
-          <!--begin::Close-->
-           <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-          </div>
-          <!--end::Close-->
-  
-        </div>
-        <!--end::Modal header-->
-  
-        <!--begin::Modal body-->
-        <div class="modal-body px-5 my-7">
-  
-
-
-
-<!--begin::Form-->
-<form [formGroup]="informeForm"  >
-
-    <!--begin::Order details-->
-    <div class="card card-flush py-4">
-
-        <!--begin::Card body-->
-        <div class="card-body pt-0">
-            <!--begin::Billing address-->
-            <div class="d-flex flex-column gap-5 gap-md-7">
-                <!--begin::Title-->
-                <div class="fs-3 fw-bold mb-n2">Informe de Calificacion</div>
-                <!--end::Title-->
-
-                <!--begin::Input group-->
-                <div class="d-flex flex-column flex-md-row gap-5">
-                    <div class="fv-row flex-row-fluid">
-
-                        <!--begin::Label-->
-                        <label class="required form-label">Razon social</label>
-                        <!--end::Label-->
-
-                        <!--begin::Input-->
-                        <input type="text" formControlName="razonsocial"  class="form-control" />
-                        <control-messages [control]="getControl('razonsocial')"></control-messages>
-                        <!--end::Input-->
-                    </div>
-
-                    <div class="flex-row-fluid">
-                        <!--begin::Label-->
-                        <label class="form-label">Representante legal</label>
-                        <!--end::Label-->
-
-                        <!--begin::Input-->
-                        <input type="text" formControlName="representantelegal"  class="form-control" />
-                        <control-messages [control]="getControl('representantelegal')"></control-messages>
-                        <!--end::Input-->
-                    </div>
-
-                    <div style="width: 80px;" class="flex-row-fluid">
-                        <!--begin::Label-->
-                        <label class="form-label">Cedula</label>
-                        <!--end::Label-->
-
-                        <!--begin::Input-->
-                        <input type="number" formControlName="cedula"  class="form-control" />
-                        <control-messages [control]="getControl('cedula')"></control-messages>
-                        <!--end::Input-->
-                    </div>
-
-                    <div style="width: 120px;" class="flex-row-fluid">
-                        <!--begin::Label-->
-                        <label class="form-label">Fecha entrega docs</label>
-                        <!--end::Label-->
-
-                        <!--begin::Input-->
-                        <input type="date" formControlName="fechaentrega"  class="form-control" />
-                        <control-messages [control]="getControl('fechaentrega')"></control-messages>
-                        <!--end::Input-->
-                    </div>
-                </div>
-                <!--end::Input group-->
-
-                
-                <!--begin::Input group-->
-                <div class="d-flex flex-column flex-md-row gap-5">
-                    
-                    <!-- <div style="width: 380px;" class="flex-row-fluid">
-                        <label class="form-label">Items objeto de del informe</label>
-
-                        <input type="text" formControlName="items"  class="form-control" />
-                        <control-messages [control]="getControl('items')"></control-messages>
-                    </div> -->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="ofertatecnicaCheck"formControlName="ofertatecnica"  type="checkbox" class="form-check-input"  />
-                        <label for="ofertatecnicaCheck" class="form-check-label" >
-                            ADJUNTA PROPUESTA TECNICA
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="cumpleofertaadjCheck"formControlName="cumpleofertaadj"  type="checkbox" class="form-check-input"  />
-                        <label for="cumpleofertaadjCheck" class="form-check-label" >
-                            CUMPLE la OFERTA ADJUDICADA
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="cumpleOfertaAdjCheck"formControlName="cumpledocumentos"  type="checkbox" class="form-check-input"  />
-                        <label for="cumpleOfertaAdjCheck" class="form-check-label" >
-                            CUMPLE con los DOCUMENTOS
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="d-flex flex-column flex-md-row gap-5">
-
-                    
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="copianitCheck"formControlName="copianit"  type="checkbox" class="form-check-input"  />
-                        <label for="copianitCheck" class="form-check-label" >
-                            Cpia NIT
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="certificadonitCheck"formControlName="certificadonit"  type="checkbox" class="form-check-input"  />
-                        <label for="certificadonitCheck" class="form-check-label" >
-                            Cert. NIT
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="seprecCheck"formControlName="seprec"  type="checkbox" class="form-check-input"  />
-                        <label for="seprecCheck" class="form-check-label" >
-                            SEPREC
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="copiaciCheck"formControlName="copiaci"  type="checkbox" class="form-check-input"  />
-                        <label for="copiaciCheck" class="form-check-label" >
-                            Fotocopia CI
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="gestoraCheck"formControlName="gestora"  type="checkbox" class="form-check-input"  />
-                        <label for="gestoraCheck" class="form-check-label" >
-                            Gestora
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="sigepCheck"formControlName="sigep"  type="checkbox" class="form-check-input"  />
-                        <label for="sigepCheck" class="form-check-label" >
-                            SIGEP
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="formulario2bCheck"formControlName="formulario2b"  type="checkbox" class="form-check-input"  />
-                        <label for="formulario2bCheck" class="form-check-label" >
-                            Form. 2B
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                    <!--begin::Checkbox-->
-                    <div class="form-check form-check-custom form-check-solid">
-                        <input id="rupeCheck"formControlName="rupe"  type="checkbox" class="form-check-input"  />
-                        <label for="rupeCheck" class="form-check-label" >
-                            RUPE
-                        </label>
-                    </div>
-                    <!--end::Checkbox-->
-
-                </div>
-                <!--end::Input group-->
-
-                <!--begin::Input group-->
-                <div class="d-flex flex-column flex-md-row gap-5">
-
-                    
-
-
-
-
-
-
-
-
-
-
-                    
-                </div>
-                <!--end::Input group-->
-
+        <!--begin::Modal content-->
+        <div class="modal-content">
+    
+            <!-- ---- Titulo ------- -->
+            <!--begin::Modal header-->
+            <div class="modal-header" id="kt_modal_add_user_header">
+    
+            <!--begin::Modal title-->
+            <h2 class="fw-bold">Datos para Informes </h2>
+            <!--end::Modal title-->
+    
+            <!--begin::Close-->
+            <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
             </div>
-            <!--end::Billing address-->
+            <!--end::Close-->
+    
+            </div>
+            <!--end::Modal header-->
+    
+            <!--begin::Modal body-->
+            <div class="modal-body px-5 my-7">
+    
+                <!-- //////////// Radiobutton ///////////////////// -->
+                <!--begin::Card body-->
+                <div class="card-body pt-0">
+                    <!--begin::Billing address-->
+                    <div class="d-flex flex-column gap-5 gap-md-7">
+                        <!--begin::Title-->
+                        <div class="fs-3 fw-bold mb-n2">Seleccione informe a registrar</div>
+                        <!--end::Title-->
+
+                        <!--begin::Input group-->
+                        <div class="d-flex flex-column flex-md-row gap-5">
+
+                            <div class="fv-row flex-row-fluid">
+
+                                <!--begin::Roles-->
+                                <div class="d-flex fv-row gap-4">
+
+                                    <div class="form-check form-check-custom form-check-solid">
+                                        <input id="verificacion" value="verificacion" type="radio" [(ngModel)]="seleccionRadio"  (change)="onChangeSeleccion()" class="form-check-input me-3" />
+                                        <label class="form-check-label" for="verificacion">
+                                            <div class="fw-bold text-gray-800">Informe de Verificacion</div>
+                                            <div class="text-gray-600">Activa formulario</div>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check form-check-custom form-check-solid">
+                                        <input id="recepcion" value="recepcion" type="radio" [(ngModel)]="seleccionRadio"  (change)="onChangeSeleccion()" class="form-check-input me-3" />
+                                        <label class="form-check-label" for="recepcion">
+                                            <div class="fw-bold text-gray-800">Informe de Recepcion</div>
+                                            <div class="text-gray-600">Activa formulario</div>
+                                        </label>
+                                    </div>
+                                    
+                                </div>
+                                <!--end::Roles-->
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <br>
+
+                    <!-- /////////////////////  INFORME  VERIFICACION ///////////////////// -->
+
+                    <!--begin::Form-->
+                    <form [formGroup]="informeForm"  >
+
+                        <!--begin::Order details-->
+                        <div *ngIf="mostrarSeccionVerificacion" class="card card-flush py-4">
+
+                            <!--begin::Card body-->
+                            <div class="card-body pt-0">
+                                <!--begin::Billing address-->
+                                <div class="d-flex flex-column gap-5 gap-md-7">
+                                    <!--begin::Title-->
+                                    <div class="fs-3 fw-bold mb-n2">Informe de Verificacion</div>
+                                    <!--end::Title-->
+
+                                    <!--begin::Input group-->
+                                    <div class="d-flex flex-column flex-md-row gap-5">
+                                        <div class="fv-row flex-row-fluid">
+
+                                            <!--begin::Label-->
+                                            <label class="required form-label">Razon social</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="text" formControlName="razonsocial"  class="form-control" />
+                                            <control-messages [control]="getControl('razonsocial')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div class="flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Representante legal</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="text" formControlName="representantelegal"  class="form-control" />
+                                            <control-messages [control]="getControl('representantelegal')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div style="width: 80px;" class="flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Cedula</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="number" formControlName="cedula"  class="form-control" />
+                                            <control-messages [control]="getControl('cedula')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div style="width: 120px;" class="flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Fecha entrega docs</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="date" formControlName="fechaentrega"  class="form-control" />
+                                            <control-messages [control]="getControl('fechaentrega')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    
+                                    <!--begin::Input group-->
+                                    <div class="d-flex flex-column flex-md-row gap-5">
+                                        
+                                        <!-- <div style="width: 380px;" class="flex-row-fluid">
+                                            <label class="form-label">Items objeto de del informe</label>
+
+                                            <input type="text" formControlName="items"  class="form-control" />
+                                            <control-messages [control]="getControl('items')"></control-messages>
+                                        </div> -->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="ofertatecnicaCheck"formControlName="ofertatecnica"  type="checkbox" class="form-check-input"  />
+                                            <label for="ofertatecnicaCheck" class="form-check-label" >
+                                                ADJUNTA PROPUESTA TECNICA
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="cumpleofertaadjCheck"formControlName="cumpleofertaadj"  type="checkbox" class="form-check-input"  />
+                                            <label for="cumpleofertaadjCheck" class="form-check-label" >
+                                                CUMPLE la OFERTA ADJUDICADA
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="cumpleOfertaAdjCheck"formControlName="cumpledocumentos"  type="checkbox" class="form-check-input"  />
+                                            <label for="cumpleOfertaAdjCheck" class="form-check-label" >
+                                                CUMPLE con los DOCUMENTOS
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    <!--begin::Input group-->
+                                    <div class="d-flex flex-column flex-md-row gap-5">
+
+                                        
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="copianitCheck"formControlName="copianit"  type="checkbox" class="form-check-input"  />
+                                            <label for="copianitCheck" class="form-check-label" >
+                                                Copia NIT
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="certificadonitCheck"formControlName="certificadonit"  type="checkbox" class="form-check-input"  />
+                                            <label for="certificadonitCheck" class="form-check-label" >
+                                                Cert. NIT
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="seprecCheck"formControlName="seprec"  type="checkbox" class="form-check-input"  />
+                                            <label for="seprecCheck" class="form-check-label" >
+                                                SEPREC
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="copiaciCheck"formControlName="copiaci"  type="checkbox" class="form-check-input"  />
+                                            <label for="copiaciCheck" class="form-check-label" >
+                                                Fotocopia CI
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="gestoraCheck"formControlName="gestora"  type="checkbox" class="form-check-input"  />
+                                            <label for="gestoraCheck" class="form-check-label" >
+                                                Gestora
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="sigepCheck"formControlName="sigep"  type="checkbox" class="form-check-input"  />
+                                            <label for="sigepCheck" class="form-check-label" >
+                                                SIGEP
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="formulario2bCheck"formControlName="formulario2b"  type="checkbox" class="form-check-input"  />
+                                            <label for="formulario2bCheck" class="form-check-label" >
+                                                Form. 2B
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                        <!--begin::Checkbox-->
+                                        <div class="form-check form-check-custom form-check-solid">
+                                            <input id="rupeCheck"formControlName="rupe"  type="checkbox" class="form-check-input"  />
+                                            <label for="rupeCheck" class="form-check-label" >
+                                                RUPE
+                                            </label>
+                                        </div>
+                                        <!--end::Checkbox-->
+
+                                    </div>
+                                    <!--end::Input group-->
+
+                                </div>
+                                <!--end::Billing address-->
+
+                            </div>
+                            <!--end::Card body-->
+
+                            <!--begin::Buttons pane-->
+                            <div class="d-flex justify-content-end">
+
+                                <a  (click)="cancelarForm()"  class="btn btn-light me-5">
+                                    Cancelar
+                                </a>
+
+                                <button 
+                                    type="button" 
+                                    class="btn btn-primary" 
+                                    (click)="guardarInformeVrificacion()"
+                                    [disabled]="informeForm.invalid" 
+                                    data-kt-stepper-action="submit">
+                                    <span class="indicator-label">
+                                        Guardar
+                                    </span>
+                                </button>
+
+                            </div>
+                            <!--end::Buttons pane-->
+
+                        </div>
+                        <!--end::Order details-->
+
+                    </form>
+                    <!--end::Form-->
+
+                    <!-- /////////////////////  INFORME  RECEPCION ///////////////////// -->
+
+                    <!--begin::Form-->
+                    <form [formGroup]="informeRecepcionForm"  >
+
+                        <!--begin::Order details-->
+                        <div *ngIf="mostrarSeccionRecepcion" class="card card-flush py-4">
+
+                            <!--begin::Card body-->
+                            <div class="card-body pt-0">
+                                <!--begin::Billing address-->
+                                <div class="d-flex flex-column gap-5 gap-md-7">
+                                    <!--begin::Title-->
+                                    <div class="fs-3 fw-bold mb-n2">Informe de Recepcion</div>
+                                    <!--end::Title-->
+
+
+                                    
+                                    <!--begin::Input group-->
+                                    <div class="d-flex flex-column flex-md-row gap-5">
+                                        <div class="fv-row flex-row-fluid">
+
+                                            <!--begin::Label-->
+                                            <label class="required form-label">Cite Memo Unidad Sol.</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="text" formControlName="citememounidadsol"  class="form-control" />
+                                            <control-messages [control]="getControlRecepcion('citememounidadsol')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div class="flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Cite Memo Resp. Adm.</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="text" formControlName="citememoadmin"  class="form-control"  />
+                                            <control-messages [control]="getControlRecepcion('citememoadmin')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div style="width: 250px;"   class="flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="required form-label">Responsable Adm)</label>
+                                            <!--end::Label-->
+
+                                            <select class="form-select form-select-solid" 
+                                                formControlName="idresponsablerecepcionadmin">
+                                                <option *ngFor="let item of responsablesRecepcionAdmin" [value]="item.id">
+                                                    {{ item.nombrecompleto }}
+                                                </option>
+                                            </select>
+                                            <control-messages [control]="getControlRecepcion('idresponsablerecepcionadmin')"></control-messages>
+                                        </div>
+
+                                        <!-- <div style="width: 80px;" class="flex-row-fluid">
+                                            <label class="form-label">Responsable Adm.</label>
+
+                                            <input type="number" formControlName="idresponsablerecepcionadmin"  class="form-control" />
+                                            <control-messages [control]="getControlRecepcion('idresponsablerecepcionadmin')"></control-messages>
+                                        </div> -->
+
+                                        <!-- <div style="width: 120px;" class="flex-row-fluid">
+                                            <label class="form-label">Cargo Resp. Admin.</label>
+                                            <input type="text" formControlName="cargoresponsablerecepcion"  class="form-control" />
+                                            <control-messages [control]="getControlRecepcion('cargoresponsablerecepcion')"></control-messages>
+                                        </div> -->
+
+                                    </div>
+                                    <!--end::Input group-->
+
+                                    
+                                    <!--begin::Input group-->
+                                    <div class="d-flex flex-column flex-md-row gap-5">
+                                            
+                                        <div style="width: 20%;" class="flex-row-fluid">
+                                                <!--begin::Label-->
+                                                <label class="form-label">Fecha Memorandum</label>
+                                                <!--end::Label-->
+
+                                                <!--begin::Input-->
+                                                <input type="date" formControlName="fechamemo"  class="form-control" />
+                                                <control-messages [control]="getControlRecepcion('fechamemo')"></control-messages>
+                                                <!--end::Input-->
+                                        </div>
+
+                                        <div style="width: 25%;" class="flex-row-fluid">
+                                            <!--begin::Label-->
+                                            <label class="form-label">Fecha Recepcion</label>
+                                            <!--end::Label-->
+
+                                            <!--begin::Input-->
+                                            <input type="datetime-local" formControlName="fecharecepcion"  class="form-control" />
+                                            <control-messages [control]="getControlRecepcion('fecharecepcion')"></control-messages>
+                                            <!--end::Input-->
+                                        </div>
+
+                                        <div style="width: 55%;" class="flex-row-fluid">
+
+                                        </div>
+
+                                    </div>
+                                    <!--end::Input group-->
+
+                                </div>
+                                <!--end::Billing address-->
+
+                            </div>
+                            <!--end::Card body-->
+
+                            <!--begin::Buttons pane-->
+                            <div class="d-flex justify-content-end">
+
+                                <a  (click)="cancelarForm()" class="btn btn-light me-5">
+                                    Cancelar
+                                </a>
+
+                                <button 
+                                    type="button" 
+                                    class="btn btn-primary" 
+                                    (click)="guardarInformeRecepcion()"
+                                    [disabled]="informeRecepcionForm.invalid" 
+                                    data-kt-stepper-action="submit">
+                                    <span class="indicator-label">
+                                        Guardar
+                                    </span>
+                                </button>
+
+                            </div>
+                            <!--end::Buttons pane-->
+
+                        </div>
+                        <!--end::Order details-->
+
+                    </form>
+                    <!--end::Form-->
+
+                </div>
+                <!--end::Modal body-->
+                
+            </div>
 
         </div>
-        <!--end::Card body-->
+        <!--end::Modal content-->
 
-        <!--begin::Buttons pane-->
-        <div class="d-flex justify-content-end">
-
-            <a  routerLink="/dashboard/procesos/lista"class="btn btn-light me-5">
-                Cancelar
-            </a>
-
-            <button 
-                type="button" 
-                class="btn btn-primary" 
-                (click)="guardarInformeVrificacion()"
-                [disabled]="informeForm.invalid" 
-                data-kt-stepper-action="submit">
-                <span class="indicator-label">
-                    Guardar
-                </span>
-            </button>
-
-        </div>
-        <!--end::Buttons pane-->
-
-    </div>
-    <!--end::Order details-->
-
-</form>
-<!--end::Form-->
-
-
-
-            
-        </div>
-        <!--end::Modal body-->
-      </div>
-      <!--end::Modal content-->
     </div>
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Add task-->
   
+
+
+
+
+
+
+
+
 <!-- ----------  MODAL IMPRIMIR   --------------------------------- -->
 <div class="modal fade" id="kt_modal_imprimir_proceso" >
 
   <!--begin::Modal dialog-->
-  <div class="modal-dialog modal-dialog-centered mw-650px">
+  <div class="modal-dialog modal-dialog-centered mw-900px">
 
     <!--begin::Modal content-->
     <div class="modal-content">
@@ -329,7 +502,7 @@
       <div class="modal-header" id="kt_modal_add_user_header">
 
         <!--begin::Modal title-->
-        <h2 class="fw-bold">Imprimir Proeso </h2>
+        <h2 class="fw-bold">Imprimir Proceso </h2>
         <!--end::Modal title-->
 
         <!--begin::Close-->

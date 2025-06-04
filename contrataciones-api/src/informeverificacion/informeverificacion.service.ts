@@ -11,7 +11,7 @@ export class InformeverificacionService {
   constructor(
         @InjectRepository(Informeverificacion) private informeVerifRepository: Repository<Informeverificacion>,
         
-    ) {}
+  ) {}
 
   async create(createInformeverificacionDto: CreateInformeverificacionDto)  : Promise<Informeverificacion> {
       try {
@@ -31,6 +31,18 @@ export class InformeverificacionService {
       const query =  await this.informeVerifRepository.find({
         where: { activo: true},
         order: { id: "ASC"     }
+      });
+      
+      return query
+  }
+
+  async findAllByProceso(idSol: number) : Promise<Informeverificacion[]> {
+      const query =  await this.informeVerifRepository.find({
+        where: { 
+          idsolicitud: idSol,
+          activo: true
+        },
+        order: { id: "DESC"     }
       });
       
       return query

@@ -20,6 +20,18 @@ export class GeneraWordController {
   }
 
   ///////////////////////////////////////////
+
+  @Post('proceso-adquisicion')
+  async descargarProceso(@Body() body: any, @Res() res: Response) {
+    const idSol = Number(body.idSol); 
+
+    const docBuffer = await this.generaWordService.generaProcesoAdquisicion(idSol);
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Disposition', 'attachment; filename=resultado.docx');
+    res.send(docBuffer);
+  }
+
   @Post('informe-verificacion')
   async descargarInformeVerif(@Body() body: any, @Res() res: Response) {
     const id = Number(body.id); 
@@ -31,11 +43,11 @@ export class GeneraWordController {
     res.send(docBuffer);
   }
 
-  @Post('proceso-adquisicion')
-  async descargarProceso(@Body() body: any, @Res() res: Response) {
+  @Post('informe-recepcion')
+  async descargarInformeRecep(@Body() body: any, @Res() res: Response) {
     const idSol = Number(body.idSol); 
 
-    const docBuffer = await this.generaWordService.generaProcesoAdquisicion(idSol);
+    const docBuffer = await this.generaWordService.generaInformeRecepcion(idSol);
 
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
     res.setHeader('Content-Disposition', 'attachment; filename=resultado.docx');

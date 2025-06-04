@@ -13,6 +13,8 @@ import { CertificadoPresupuestario } from '../../dashboard/models/certificado-pr
 import { DocumentoData } from '../../dashboard/models/documento-data.model';
 import { RequerimientoProceso } from '../../dashboard/models/requerimiento-proceso';
 import { InformeVerifiacion } from '../../dashboard/models/informe-verificacion.model';
+import { InformeRecepcion } from '../../dashboard/models/informe-recepcion.model';
+import { InformeRecepcionResponsableAdmin } from '../../dashboard/models/informe-recepcion-responsable-admin';
 
 @Injectable({
   providedIn: 'root'
@@ -169,6 +171,11 @@ export class ApiService {
     .pipe<InformeVerifiacion[]>(map((data: any) => data));
   }
 
+  getAllInformeVerificacionByProceso(idSol: number): Observable<InformeVerifiacion[]> {
+    return this.http.get(`${this.url}informeverificacion/proceso/${idSol}`)
+    .pipe<InformeVerifiacion[]>(map((data: any) => data));
+  }
+
   addInformeVerificacion(informe: InformeVerifiacion): Observable<InformeVerifiacion> {
     return this.http.post<InformeVerifiacion>(`${this.url}informeverificacion/`, informe);
   }
@@ -179,6 +186,47 @@ export class ApiService {
 
   deleteInformeVerificacion(id: number): Observable<any> {
     return this.http.delete<InformeVerifiacion>(`${this.url}informeverificacion/${id}`);
+  }
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  //////////////////   INFORME RECEPCION     /////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
+  getAllInformeRecepion(): Observable<InformeRecepcion[]> {
+    return this.http.get(`${this.url}informe-recepcion`)
+    .pipe<InformeRecepcion[]>(map((data: any) => data));
+  }
+
+  getInformeRececionByProceso(idSol: number): Observable<InformeRecepcion> {
+    return this.http.get(`${this.url}informe-recepcion/proceso/${idSol}`)
+    .pipe<InformeRecepcion>(map((data: any) => data));
+  }
+
+  addInformeRecepcion(informe: InformeRecepcion): Observable<InformeRecepcion> {
+    return this.http.post<InformeRecepcion>(`${this.url}informe-recepcion/`, informe);
+  }
+
+  updateInformeRecepcion(id: number, informe: InformeRecepcion): Observable<InformeRecepcion> {
+    return this.http.patch<InformeRecepcion>(`${this.url}informe-recepcion/${id}`, informe);
+  }
+
+  deleteInformeReceepcion(id: number): Observable<any> {
+    return this.http.delete<InformeRecepcion>(`${this.url}informe-recepcion/${id}`);
+  }
+
+   /////////////////////////////////////////////////////////////////////////////////
+  //////////////////   FUNCIONARIO INFORME RECEPCION     /////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////
+
+  getAllResponsableRecepcion(): Observable<InformeRecepcionResponsableAdmin[]> {
+    return this.http.get(`${this.url}informe-recepcion-responsable-admin`)
+    .pipe<InformeRecepcionResponsableAdmin[]>(map((data: any) => data));
+  }
+
+  getResponsableRecepcionById(id: number): Observable<InformeRecepcionResponsableAdmin> {
+    return this.http.get(`${this.url}informe-recepcion-responsable-admin/${id}`)
+    .pipe<InformeRecepcionResponsableAdmin>(map((data: any) => data));
   }
 
 
@@ -322,6 +370,23 @@ getRequerimientosProcesoByIdSolicitud(id: number): Observable<RequerimientoProce
 
     // La opción responseType es clave - indica que esperamos un blob
     return this.http.post(`${this.url}genera-word/informe-verificacion`, body, {
+      headers: headers,
+      responseType: 'blob' // Importante para recibir el archivo como un blob
+    });
+  }
+
+  generaInformeRecepcion(idSol: number): Observable<Blob> {
+
+    const body = { idSol }; // ⬅️ Esto genera el objeto { idSol: 1 }
+    
+    // Configurar los headers necesarios
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    });
+
+    // La opción responseType es clave - indica que esperamos un blob
+    return this.http.post(`${this.url}genera-word/informe-recepcion`, body, {
       headers: headers,
       responseType: 'blob' // Importante para recibir el archivo como un blob
     });

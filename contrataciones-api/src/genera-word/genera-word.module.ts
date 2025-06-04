@@ -12,11 +12,14 @@ import { DatosConsultoriaModule } from 'src/datos-consultoria/datos-consultoria.
 import { NivelSalarialModule } from 'src/nivel-salarial/nivel-salarial.module';
 import { UnidadMedidaModule } from 'src/unidad-medida/unidad-medida.module';
 import { InformeverificacionModule } from 'src/informeverificacion/informeverificacion.module';
+import { InformeRecepcionModule } from 'src/informe-recepcion/informe-recepcion.module';
+import { InformeRecepcionResponsableAdminModule } from 'src/informe-recepcion-responsable-admin/informe-recepcion-responsable-admin.module';
 
 @Module({
   imports: [
     SolprocesoModule, RequerimientoProcesoModule, ClasificadorModule, FuncionariosModule, FormaAdjudicacionModule, MetodoSeleccionAdjudicModule,
-    ProveedorModule, DatosConsultoriaModule, NivelSalarialModule, UnidadMedidaModule, InformeverificacionModule
+    ProveedorModule, DatosConsultoriaModule, NivelSalarialModule, UnidadMedidaModule, InformeverificacionModule, InformeRecepcionModule,
+    InformeRecepcionResponsableAdminModule
   ],
   controllers: [GeneraWordController],
   providers: [GeneraWordService],
