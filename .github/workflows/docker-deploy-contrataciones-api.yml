@@ -36,8 +36,10 @@ jobs:
         run: |
           docker build -t 10.51.15.42:5000/contrataciones-api:latest ./contrataciones-api
 
+
       # 4. Subir la imagen Docker al Registry privado
       - name: Push Docker image to Registry
         run: |
           docker push 10.51.15.42:5000/contrataciones-api:latest
+
 

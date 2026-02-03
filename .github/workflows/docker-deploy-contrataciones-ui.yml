@@ -7,6 +7,7 @@ on:
     paths:
       - 'contrataciones-ui/**'  # Solo se activará si hay cambios en contrataciones-ui
 
+
 jobs:
   build-and-push:
     runs-on: self-hosted  # Utilizamos el runner local
@@ -36,6 +37,7 @@ jobs:
         run: |
           cd contrataciones-ui
           docker build -t 10.51.15.42:5000/contrataciones-ui:latest .
+
 
       # 4. Subir la imagen Docker al Registry privado
       - name: Push Docker image to Registry
