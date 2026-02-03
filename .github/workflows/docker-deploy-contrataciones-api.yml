@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'contrataciones-api/**'  # Solo se activará si hay cambios en contrataciones-api
+      - 'docker-deploy-contrataciones-api.yml'
   workflow_dispatch:             # Habilita la ejecucion manual del workflow en Github > Actions > nombre de workflow
 jobs:
   build-and-push:
