@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'contrataciones-ui/**'  # Solo se activará si hay cambios en contrataciones-ui
-  workflow_dispatch:
+  workflow_dispatch:            # Habilita la ejecucion manual del workflow en Github > Actions > nombre de workflow
 jobs:
   build-and-push:
     runs-on: self-hosted  # Utilizamos el runner local

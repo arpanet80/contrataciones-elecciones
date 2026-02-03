@@ -64,7 +64,7 @@ export class Requerimientoplan {
     @Column({default: true})
     activo?: boolean
 
-    @Column({default: true})
+    @Column()
     codigopac?: string
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", name: 'created_at'})
