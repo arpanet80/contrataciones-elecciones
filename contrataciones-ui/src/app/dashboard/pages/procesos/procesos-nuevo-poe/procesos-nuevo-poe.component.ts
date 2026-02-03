@@ -54,7 +54,7 @@ export class ProcesosNuevoPoeComponent implements OnInit, AfterViewInit {
   public solicitudGuardada!: SolicitudProceso;
   public resumenArray: {nombre: string, valor: string}[] = [];
   
-  idPlanActivo = 3;     /// SOLO PARA ELECCIONES GENERALES
+  idPlanActivo = 5;     /// SOLO PARA ELECCIONES GENERALES
   tipoContratacion = 0;
   
   public editorConfig = {

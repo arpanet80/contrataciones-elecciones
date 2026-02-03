@@ -35,7 +35,7 @@ export class ProcesosListComponent implements OnInit{
   private router = inject(Router);
   private changeDetectorRef = inject(ChangeDetectorRef);  // Inyectamos ChangeDetectorRef
 
-  idPlanActivo = 3;     /// SOLO PARA ELECCIONES GENERALES
+  idPlanActivo = 5;     /// SOLO PARA ELECCIONES GENERALES
       
   seleccionRadio: string | null = null;
   mostrarSeccionVerificacion = false;

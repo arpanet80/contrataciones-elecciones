@@ -35,7 +35,7 @@ export const menuDeOpcionesUno = {
             titulo: 'Plan Operativo',
             icono: "bi bi-diagram-3 ",
             url: "/dashboard/plan",
-            roles: [Role.Admin, Role.Usuario],
+            roles: [Role.Admin],
             opcionSimple: [
                 {
                     titulo: 'Ver Plan Operativo',

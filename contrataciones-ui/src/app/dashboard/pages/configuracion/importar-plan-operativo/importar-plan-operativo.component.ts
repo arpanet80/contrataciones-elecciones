@@ -22,7 +22,7 @@ export class ImportarPlanOperativoComponent implements OnInit {
   private notificacionService = inject( NotificacionService );
   private changeDetectorRef = inject(ChangeDetectorRef);  // Inyectamos ChangeDetectorRef
   
-  idPlanActivo = 3;     /// SOLO PARA ELECCIONES GENERALES
+  idPlanActivo = 5;     /// SOLO PARA ELECCIONES SUBNACIONALES
 
   /////////// auxiliares //////////////////
   requerimientos: RequerimientoPlan[] = [];
@@ -65,6 +65,7 @@ importEcelColumns:TableColumnSchema[] = RequerimientoPlanColumns;
           this.mostrarAlerta = false;
           this.escondeRequisitos = true
           this.mostrarBotonImportar = false;
+          
 
           /////////// INICIALIZA EL FORMULARIO  //////////////////////////
           /*this.form.patchValue({
@@ -171,7 +172,6 @@ importEcelColumns:TableColumnSchema[] = RequerimientoPlanColumns;
 
 
   SubirJson(json: any) {
-    
     if (json.length > 0) {
 
       if (json[0]["Partida"] != null || json[0]["Partida"] != undefined) {
@@ -181,7 +181,7 @@ importEcelColumns:TableColumnSchema[] = RequerimientoPlanColumns;
           //console.log("Columna 2", json[index]["Partida"].split(' ')[0]);
 
           this.requerimientos.push({
-            idplan: Number(this.estadosService.planSeleccionado()?.id),
+            idplan: this.idPlanActivo, //Number(this.estadosService.planSeleccionado()?.id),
             idunidadorganizacional: this.estadosService.estadoFuncionario()?.cargo.idunidadorganizacional,
             partida: String(json[index]["Partida"].split(' ')[0]),
             fuente: String(json[index]["Fuente Financiamiento"]),
@@ -227,6 +227,8 @@ importEcelColumns:TableColumnSchema[] = RequerimientoPlanColumns;
   }
 
   GuararRequerimientos() {
+
+
 
     this.apiService.addRequerimientosArray(this.requerimientos).subscribe({
       next: (resp) => {
