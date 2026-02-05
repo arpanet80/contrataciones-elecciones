@@ -7,8 +7,10 @@ import { Clasificador } from './entities/clasificador.entity';
 
 @Module({
   imports: [
+    
       TypeOrmModule.forFeature([Clasificador]),
       JwtModule.register({})
+
   ],
   controllers: [ClasificadorController],
   providers: [ClasificadorService],

@@ -1,5 +1,4 @@
 name: Docker Build and Push contrataciones-ui
-
 on:
   push:
     branches:

@@ -198,7 +198,8 @@ importEcelColumns:TableColumnSchema[] = RequerimientoPlanColumns;
             saldo: Number(json[index]["Saldo"]),
             actividad: String(json[index]["Actividad"]),
             resultadosalcanzados: String(json[index]["resultadosalcanzados"]),
-            idfuncionarioimport: this.estadosService.estadoFuncionario()?.id      
+            idfuncionarioimport: this.estadosService.estadoFuncionario()?.id,
+            codigopac: String(json[index]["codigopac"])
           });
 
         } // Fin for

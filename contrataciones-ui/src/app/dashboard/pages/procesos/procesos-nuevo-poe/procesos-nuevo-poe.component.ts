@@ -230,6 +230,7 @@ export class ProcesosNuevoPoeComponent implements OnInit, AfterViewInit {
         next: (resp) => {
                     
           this.requerimientosPlanSeleccinadoArray = resp.filter(item => item.tipocontratacion === this.tipoContratacion);;
+          console.log("🚀 ~ ProcesosNuevoPoeComponent ~ openDialogSeleccionRequerimientos ~ requerimientosPlanSeleccinadoArray:", this.requerimientosPlanSeleccinadoArray)
 
           //// Para la tabla ///////////////
           this.dataSource = new MatTableDataSource(this.requerimientosPlanSeleccinadoArray);
@@ -387,7 +388,8 @@ export class ProcesosNuevoPoeComponent implements OnInit, AfterViewInit {
         requerimientos: this.selectedRowsRequerimientosPlan,
         itemsProceso: this.dataSourceItems.data,
         preciototal: costoTotalProceso,
-        objetocontratacion: this.selectedRowsRequerimientosPlan[0].objetocontratacion
+        objetocontratacion: this.selectedRowsRequerimientosPlan[0].objetocontratacion,
+        codigopac: this.selectedRowsRequerimientosPlan[0].codigopac
       });
 
     }

@@ -3,6 +3,7 @@ export interface RequerimientoPlan {
   idunidadorganizacional?: number,
   partida?: string,
   fuente?: string,
+  codigopac: string,
   requerimiento?: string,
   unidad?: string,
   cantidad?: number,
