@@ -106,7 +106,7 @@ export class GeneraWordService {
       
       data = {
 
-        cite:  `TIC-PDSE-EG-Nº ${inforRecep.idsolicitud}-R/${anio}`,
+        cite:  `TIC-PDSE-ESN-Nº ${inforRecep.idsolicitud}-R/${anio}`,
         solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
         cargosolicitante: funcio.cargo.toUpperCase(),
         responsablerecepcionadmin: funcioRecepAdmin.nombrecompleto,
@@ -281,7 +281,7 @@ export class GeneraWordService {
     if (sol.idtipoproceso !== 3) {
       
       data = {
-        cite:  `TIC-PDSE-EG-Nº ${infoverif.idsolicitud}-V-${infoverif.id}/${anio}`,
+        cite:  `TIC-PDSE-ESN-Nº ${infoverif.idsolicitud}-V-${infoverif.id}/${anio}`,
         solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
         cargosolicitante: funcio.cargo.toUpperCase(),
         fechaliteral: fechaliteral,
@@ -420,7 +420,7 @@ export class GeneraWordService {
 
       data = {
         fechaliteral: fechaliteral,
-        cite:  `TIC-PDSE-EG-Nº ${sol.id}/${anio}`,
+        cite:  `TIC-PDSE-ESN-Nº ${sol.id}/${anio}`,
         objeto: sol.objetocontratacion.toUpperCase(),
         precionumeral: this.formatearDosDecimales(sol.preciototal).toString(),
         precioliteral: this.numeroALetras(sol.preciototal),
@@ -472,7 +472,7 @@ export class GeneraWordService {
       // const data: DatosProceso = {
       data = {
         fechaliteral: fechaliteral,
-        cite:  `TIC-PDSE-EG-Nº ${sol.id}/${anio}`,
+        cite:  `TIC-PDSE-ESN-Nº ${sol.id}/${anio}`,
         objeto: sol.objetocontratacion.toUpperCase(),
         precionumeral: this.formatearDosDecimales(sol.preciototal).toString(),
         precioliteral: this.numeroALetras(sol.preciototal),
@@ -480,8 +480,8 @@ export class GeneraWordService {
         partidaliteral: partida.descripcion,
         solicitante: this.toTitleCase(funcio.nombres + " " + funcio.paterno + " " + funcio.materno),
         cargosolicitante: funcio.cargo.toUpperCase(),
-        superior:'Guido Callapa Coro',
-        cargosuperior: 'GESTIÓN DE LA INFORMACIÓN DE BASE DE DATOS',
+        superior:'Lic. Daniel Henrry Mororías La Torre',
+        cargosuperior: 'JEFE DE SECCIÓN DE TECNOLOGÍAS',
         plazonumeral: sol.plazoentrega.toString(),
         plazoliteral: this.quitarUltimaPalabra(this.numeroALetras(sol.plazoentrega)),
         formaadjudicacion: formAdju.detalle,

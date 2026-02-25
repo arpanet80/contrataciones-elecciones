@@ -19,7 +19,7 @@ export class Solproceso {
     @Column()
     idformacontratacion: number;
 
-    @Column({ type: 'timestamp' })
+    @Column({ type: 'date' })
     fechasolicitud: Date;
 
     @Column()
